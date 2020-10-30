@@ -9,7 +9,7 @@ class TopNotesApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: Colors.transparent,
+        scaffoldBackgroundColor: Color(0xFF0C1720),
       ),
       home: HomeScreen(),
     );

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class Folder {
   String folderName;
   String typeOfFolder;
-  List notes;
+  List notesUnderFolder;
 
-  Folder({@required this.folderName, this.typeOfFolder, this.notes});
+  Folder({@required this.folderName, this.typeOfFolder, this.notesUnderFolder});
 }

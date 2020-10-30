@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:topnotes/models/folder_model.dart';
 import 'package:topnotes/models/tags_model.dart';
+import 'package:topnotes/ui/widgets/custom_fab.dart';
 import 'package:topnotes/utils/constants.dart';
 import 'package:topnotes/utils/size_config.dart';
+import 'package:flutter/services.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -12,8 +14,14 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<Folder> folderList = [
-    Folder(folderName: "All notes", typeOfFolder: "Normal", notes: [1, 2]),
-    Folder(folderName: "General", typeOfFolder: "Normal", notes: [1, 3]),
+    Folder(
+        folderName: "All notes",
+        typeOfFolder: "Normal",
+        notesUnderFolder: [1, 2]),
+    Folder(
+        folderName: "General",
+        typeOfFolder: "Normal",
+        notesUnderFolder: [1, 3]),
   ];
 
   List<Tag> tagsList = [
@@ -23,63 +31,37 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   TextEditingController controller = TextEditingController();
-
-  void addFolder() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Add Folder"),
-          content: TextField(
-            controller: controller,
-            textCapitalization: TextCapitalization.sentences,
-            decoration: InputDecoration(
-              hintText: "Enter folder name",
-            ),
-          ),
-          actions: [
-            FlatButton(
-              child: Text("ADD"),
-              onPressed: () {
-                setState(
-                  () {
-                    folderList.add(
-                      Folder(
-                        folderName: "${controller.text}",
-                        typeOfFolder: "Normal",
-                        notes: [],
-                      ),
-                    );
-                    Navigator.pop(context);
-                  },
-                );
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  bool selected = false;
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: Icon(
-          Icons.add,
-          color: Color(0xFF132533),
-          size: SizeConfig.blockSizeVertical * 3,
-        ),
-        backgroundColor: Color(0xFF928658),
-        onPressed: () {
-          addFolder();
+      floatingActionButton: GestureDetector(
+        onLongPress: () {
+          if (selected == false) {
+            setState(() {
+              selected = !selected;
+              HapticFeedback.lightImpact();
+            });
+          }
         },
+        onTap: () {
+          if (selected == true) {
+            setState(() {
+              selected = !selected;
+            });
+          }
+        },
+        child: CustomFAB(selected: selected),
       ),
-      body: Container(
-        height: SizeConfig.screenHeight,
-        decoration: backgroundDecoration,
+      body: GestureDetector(
+        onTap: () {
+          setState(() {
+            selected = false;
+          });
+        },
         child: ListView(
           primary: true,
           physics: BouncingScrollPhysics(),
@@ -156,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Icons.folder,
                     color: tileIconColor,
                   ),
-                  trailing: Text("${folderList[index].notes.length}",
+                  trailing: Text("${folderList[index].notesUnderFolder.length}",
                       style: tileTrailTextStyle),
                 );
               },
@@ -196,3 +178,5 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+
