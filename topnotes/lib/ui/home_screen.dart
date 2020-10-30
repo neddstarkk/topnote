@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:topnotes/models/folder_model.dart';
+import 'package:topnotes/models/tags_model.dart';
 import 'package:topnotes/utils/constants.dart';
 import 'package:topnotes/utils/size_config.dart';
 
@@ -8,15 +11,72 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List folderList = [1, 2, 3, 4, 5, 6, 7, 8];
+  List<Folder> folderList = [
+    Folder(folderName: "All notes", typeOfFolder: "Normal", notes: [1, 2]),
+    Folder(folderName: "General", typeOfFolder: "Normal", notes: [1, 3]),
+  ];
 
-  List tagsList = [1, 2, 3, 4, 5, 6, 7, 8];
+  List<Tag> tagsList = [
+    Tag(tagName: "insta", notesUnderTag: [1, 2, 3, 4]),
+    Tag(tagName: "work", notesUnderTag: [1, 2, 3, 4, 5]),
+    Tag(tagName: "design", notesUnderTag: [1, 2]),
+  ];
+
+  TextEditingController controller = TextEditingController();
+
+  void addFolder() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Add Folder"),
+          content: TextField(
+            controller: controller,
+            textCapitalization: TextCapitalization.sentences,
+            decoration: InputDecoration(
+              hintText: "Enter folder name",
+            ),
+          ),
+          actions: [
+            FlatButton(
+              child: Text("ADD"),
+              onPressed: () {
+                setState(
+                  () {
+                    folderList.add(
+                      Folder(
+                        folderName: "${controller.text}",
+                        typeOfFolder: "Normal",
+                        notes: [],
+                      ),
+                    );
+                    Navigator.pop(context);
+                  },
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: Icon(
+          Icons.add,
+          color: Color(0xFF132533),
+          size: SizeConfig.blockSizeVertical * 3,
+        ),
+        backgroundColor: Color(0xFF928658),
+        onPressed: () {
+          addFolder();
+        },
+      ),
       body: Container(
         height: SizeConfig.screenHeight,
         decoration: backgroundDecoration,
@@ -30,12 +90,42 @@ class _HomeScreenState extends State<HomeScreen> {
                   top: SizeConfig.blockSizeVertical * 4,
                   left: SizeConfig.blockSizeHorizontal * 4,
                   bottom: SizeConfig.blockSizeVertical * 3),
-              child: Text(
-                "TopNotes",
-                style: TextStyle(
-                    fontSize: SizeConfig.blockSizeVertical * 4,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "TopNotes",
+                    style: TextStyle(
+                        fontSize: SizeConfig.blockSizeVertical * 4,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      print("Settings button pressed");
+                    },
+                    child: Container(
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.settings,
+                            color: tileIconColor,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              right: SizeConfig.blockSizeHorizontal * 4,
+                              left: SizeConfig.blockSizeHorizontal,
+                            ),
+                            child: Text(
+                              "Settings",
+                              style: TextStyle(color: tileIconColor),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
 
@@ -59,14 +149,15 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(
-                    "All notes",
+                    "${folderList[index].folderName}",
                     style: TextStyle(color: Colors.white),
                   ),
                   leading: Icon(
                     Icons.folder,
                     color: tileIconColor,
                   ),
-                  trailing: Text("$index", style: tileTrailTextStyle),
+                  trailing: Text("${folderList[index].notes.length}",
+                      style: tileTrailTextStyle),
                 );
               },
             ),
@@ -84,14 +175,20 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-            for (var i in tagsList)
+            for (var tag in tagsList)
               ListTile(
-                leading: Icon(Icons.local_offer_outlined, color: tileIconColor,),
-                title: Text(
-                  "Tag number $i",
-                  style: TextStyle(color: Colors.white),
+                leading: Icon(
+                  Icons.local_offer_outlined,
+                  color: tileIconColor,
                 ),
-                trailing: Text("$i", style: tileTrailTextStyle,),
+                title: Text(
+                  "${tag.tagName}",
+                  style: TextStyle(color: Color(0xFF667079)),
+                ),
+                trailing: Text(
+                  "${tag.notesUnderTag.length}",
+                  style: tileTrailTextStyle,
+                ),
               ),
           ],
         ),
