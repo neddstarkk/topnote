@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:topnotes/models/folder_model.dart';
-import 'package:topnotes/models/tags_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:topnotes/cubits/folders/folder_cubit.dart';
+import 'package:topnotes/data/models/folder_model.dart';
+import 'package:topnotes/data/models/tags_model.dart';
+import 'package:topnotes/ui/widgets/build_folders_list_widget.dart';
+import 'package:topnotes/ui/widgets/build_tags_list_widget.dart';
+import 'package:topnotes/ui/widgets/custom_appbar_row.dart';
 import 'package:topnotes/ui/widgets/custom_fab.dart';
 import 'package:topnotes/utils/constants.dart';
 import 'package:topnotes/utils/size_config.dart';
@@ -13,16 +18,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Folder> folderList = [
-    Folder(
-        folderName: "All notes",
-        typeOfFolder: "Normal",
-        notesUnderFolder: [1, 2]),
-    Folder(
-        folderName: "General",
-        typeOfFolder: "Normal",
-        notesUnderFolder: [1, 3]),
-  ];
+  List<Folder> folderList = [];
 
   List<Tag> tagsList = [
     Tag(tagName: "insta", notesUnderTag: [1, 2, 3, 4]),
@@ -32,6 +28,32 @@ class _HomeScreenState extends State<HomeScreen> {
 
   TextEditingController controller = TextEditingController();
   bool selected = false;
+
+  void onFABPress(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Add Folder"),
+            content: TextField(
+              controller: controller,
+              decoration: InputDecoration(hintText: "Enter Folder Name"),
+              textCapitalization: TextCapitalization.sentences,
+            ),
+            actions: [
+              FlatButton(
+                child: Text("ADD"),
+                onPressed: () {
+                  final folderCubit = context.bloc<FolderCubit>();
+                  folderCubit.changeState(controller.text);
+                  controller.clear();
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,10 +70,8 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         },
         onTap: () {
-          if (selected == true) {
-            setState(() {
-              selected = !selected;
-            });
+          if (selected == false) {
+            onFABPress(context);
           }
         },
         child: CustomFAB(selected: selected),
@@ -83,29 +103,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontWeight: FontWeight.bold),
                   ),
                   GestureDetector(
-                    onTap: () {
-                      print("Settings button pressed");
-                    },
-                    child: Container(
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.settings,
-                            color: tileIconColor,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              right: SizeConfig.blockSizeHorizontal * 4,
-                              left: SizeConfig.blockSizeHorizontal,
-                            ),
-                            child: Text(
-                              "Settings",
-                              style: TextStyle(color: tileIconColor),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
+                    onTap: () {},
+                    child: CustomAppBarRow(),
                   ),
                 ],
               ),
@@ -124,23 +123,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             // Folders Listview
-            ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: folderList.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(
-                    "${folderList[index].folderName}",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  leading: Icon(
-                    Icons.folder,
-                    color: tileIconColor,
-                  ),
-                  trailing: Text("${folderList[index].notesUnderFolder.length}",
-                      style: tileTrailTextStyle),
-                );
+            BlocBuilder<FolderCubit, List<Folder>>(
+              builder: (context, state) {
+                return buildFoldersList(state);
               },
             ),
 
@@ -157,26 +142,16 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-            for (var tag in tagsList)
-              ListTile(
-                leading: Icon(
-                  Icons.local_offer_outlined,
-                  color: tileIconColor,
-                ),
-                title: Text(
-                  "${tag.tagName}",
-                  style: TextStyle(color: Color(0xFF667079)),
-                ),
-                trailing: Text(
-                  "${tag.notesUnderTag.length}",
-                  style: tileTrailTextStyle,
-                ),
-              ),
+            // tags list view
+            for (Tag tag in tagsList)
+              buildTagsList(tag),
           ],
         ),
       ),
     );
   }
+
+
 }
 
 

@@ -42,11 +42,6 @@ class _CustomFABState extends State<CustomFAB> {
         )),
         color: Color(0xFF1C303F),
         child: InkWell(
-          onLongPress: () {
-            setState(() {
-              widget.selected = !widget.selected;
-            });
-          },
           borderRadius: BorderRadius.all(Radius.circular(
             widget.selected
                 ? SizeConfig.blockSizeVertical * 2.5

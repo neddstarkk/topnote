@@ -1,8 +1,19 @@
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:topnotes/data/models/folder_model.dart';
 
-part 'folder_state.dart';
+class FolderCubit extends Cubit<List<Folder>> {
+  List<Folder> folderList = [];
+  FolderCubit() : super([]);
 
-class FolderCubit extends Cubit<FolderState> {
-  FolderCubit() : super(FolderInitial());
+
+  void changeState(String text) {
+    Folder folder = Folder(
+      folderName: "$text",
+      typeOfFolder: "Normal",
+      notesUnderFolder: [],
+    );
+    folderList.add(folder);
+
+    emit(folderList);
+  }
 }
