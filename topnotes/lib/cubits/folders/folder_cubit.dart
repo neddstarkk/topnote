@@ -6,7 +6,7 @@ class FolderCubit extends Cubit<List<Folder>> {
   FolderCubit() : super([]);
 
 
-  void changeState(String text) {
+  void addNewFolder(String text) {
     Folder folder = Folder(
       folderName: "$text",
       typeOfFolder: "Normal",

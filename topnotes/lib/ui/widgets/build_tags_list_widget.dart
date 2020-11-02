@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:topnotes/data/models/tags_model.dart';
-import 'package:topnotes/utils/constants.dart';
+import 'package:topnotes/internal/utils/constants.dart';
 
 Widget buildTagsList(Tag tag) {
   return ListTile(

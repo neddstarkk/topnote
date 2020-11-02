@@ -4,12 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:topnotes/cubits/folders/folder_cubit.dart';
 import 'package:topnotes/data/models/folder_model.dart';
 import 'package:topnotes/data/models/tags_model.dart';
+import 'package:topnotes/internal/utils/constants.dart';
+import 'package:topnotes/internal/utils/global_key_registry.dart';
+import 'package:topnotes/internal/utils/show_fab_menu.dart';
+import 'package:topnotes/internal/utils/size_config.dart';
 import 'package:topnotes/ui/widgets/build_folders_list_widget.dart';
 import 'package:topnotes/ui/widgets/build_tags_list_widget.dart';
 import 'package:topnotes/ui/widgets/custom_appbar_row.dart';
-import 'package:topnotes/ui/widgets/custom_fab.dart';
-import 'package:topnotes/utils/constants.dart';
-import 'package:topnotes/utils/size_config.dart';
+import 'package:topnotes/ui/widgets/fake_fab.dart';
 import 'package:flutter/services.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -27,6 +29,8 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   TextEditingController controller = TextEditingController();
+  ScrollController scrollController =
+      ScrollController(initialScrollOffset: 0.0);
   bool selected = false;
 
   void onFABPress(BuildContext context) {
@@ -45,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Text("ADD"),
                 onPressed: () {
                   final folderCubit = context.bloc<FolderCubit>();
-                  folderCubit.changeState(controller.text);
+                  folderCubit.addNewFolder(controller.text);
                   controller.clear();
                   Navigator.pop(context);
                 },
@@ -55,27 +59,63 @@ class _HomeScreenState extends State<HomeScreen> {
         });
   }
 
+  List<Widget> get fabOptions {
+    return [
+      ListTile(
+        leading: Icon(
+          Icons.local_offer_outlined,
+          color: Color(0xFF2F4E60),
+        ),
+        title: Text("New Tag", style: TextStyle(color: Colors.white70),),
+      ),
+      ListTile(
+        leading: Icon(
+          Icons.folder,
+          color: Color(0xFF2F4E60),
+        ),
+        title: Text("New Folder", style: TextStyle(color: Colors.white70),),
+      ),
+      ListTile(
+        leading: Icon(
+          Icons.add,
+          color: Color(0xFFDAC279),
+        ),
+        title: Text(
+          "New Note",
+          style: TextStyle(color: Colors.white70),
+        ),
+      )
+    ];
+  }
+
+  Widget get fab {
+    return Hero(
+      tag: "fabMenu",
+      child: FakeFab(
+        controller: scrollController,
+        onLongPress: () {
+          Utils.showFabMenu(context, fabOptions);
+        },
+        key: GlobalKeyRegistry.get("fab"),
+        shape: RoundedRectangleBorder(
+          borderRadius:
+              BorderRadius.circular(SizeConfig.blockSizeVertical * 10),
+        ),
+        onTap: () => onFABPress(context),
+        child: Icon(
+          Icons.create,
+          color: Color(0xFFDAC279),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
     return Scaffold(
-      floatingActionButton: GestureDetector(
-        onLongPress: () {
-          if (selected == false) {
-            setState(() {
-              selected = !selected;
-              HapticFeedback.lightImpact();
-            });
-          }
-        },
-        onTap: () {
-          if (selected == false) {
-            onFABPress(context);
-          }
-        },
-        child: CustomFAB(selected: selected),
-      ),
+      floatingActionButton: fab,
       body: GestureDetector(
         onTap: () {
           setState(() {
@@ -83,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         },
         child: ListView(
-          primary: true,
+          controller: scrollController,
           physics: BouncingScrollPhysics(),
           children: [
             // TopNotes text padding
@@ -143,15 +183,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             // tags list view
-            for (Tag tag in tagsList)
-              buildTagsList(tag),
+            for (Tag tag in tagsList) buildTagsList(tag),
           ],
         ),
       ),
     );
   }
-
-
 }
-
-

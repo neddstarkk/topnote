@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:topnotes/utils/constants.dart';
-import 'package:topnotes/utils/size_config.dart';
+import 'package:topnotes/internal/utils/constants.dart';
+import 'package:topnotes/internal/utils/size_config.dart';
 
 class CustomAppBarRow extends StatelessWidget {
   const CustomAppBarRow({
