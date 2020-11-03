@@ -6,5 +6,10 @@ class TagCubit extends Cubit<List<Tag>> {
   List<Tag> tagList = [];
   TagCubit() : super([]);
 
-  void addNewTag() {}
+  void addNewTag(String text) {
+    Tag tag = Tag(tagName: text, notesUnderTag: []);
+    tagList.add(tag);
+
+    emit(tagList);
+  }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:topnotes/cubits/folders/folder_cubit.dart';
+import 'package:topnotes/cubits/tags/tag_cubit.dart';
 import 'package:topnotes/data/models/folder_model.dart';
 import 'package:topnotes/data/models/tags_model.dart';
 import 'package:topnotes/internal/utils/constants.dart';
@@ -22,18 +23,14 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List<Folder> folderList = [];
 
-  List<Tag> tagsList = [
-    Tag(tagName: "insta", notesUnderTag: [1, 2, 3, 4]),
-    Tag(tagName: "work", notesUnderTag: [1, 2, 3, 4, 5]),
-    Tag(tagName: "design", notesUnderTag: [1, 2]),
-  ];
+  List<Tag> tagsList = [];
 
   TextEditingController controller = TextEditingController();
   ScrollController scrollController =
-      ScrollController(initialScrollOffset: 0.0);
+  ScrollController(initialScrollOffset: 0.0);
   bool selected = false;
 
-  void onFABPress(BuildContext context) {
+  void addFolder(BuildContext context) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -59,6 +56,33 @@ class _HomeScreenState extends State<HomeScreen> {
         });
   }
 
+  void addTag(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Add Tag"),
+            content: TextField(
+              controller: controller,
+              decoration: InputDecoration(hintText: "Enter Tag Name"),
+              textCapitalization: TextCapitalization.sentences,
+            ),
+            actions: [
+              FlatButton(
+                child: Text("ADD"),
+                onPressed: () {
+                  final tagCubit = context.bloc<TagCubit>();
+                  tagCubit.addNewTag(controller.text);
+                  controller.clear();
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+
   List<Widget> get fabOptions {
     return [
       ListTile(
@@ -66,14 +90,24 @@ class _HomeScreenState extends State<HomeScreen> {
           Icons.local_offer_outlined,
           color: Color(0xFF2F4E60),
         ),
-        title: Text("New Tag", style: TextStyle(color: Colors.white70),),
+        title: Text(
+          "New Tag",
+          style: TextStyle(color: Colors.white70),
+        ),
+        onTap: () => addTag(context),
       ),
       ListTile(
         leading: Icon(
           Icons.folder,
           color: Color(0xFF2F4E60),
         ),
-        title: Text("New Folder", style: TextStyle(color: Colors.white70),),
+        title: Text(
+          "New Folder",
+          style: TextStyle(color: Colors.white70),
+        ),
+        onTap: () {
+          addFolder(context);
+        },
       ),
       ListTile(
         leading: Icon(
@@ -99,9 +133,9 @@ class _HomeScreenState extends State<HomeScreen> {
         key: GlobalKeyRegistry.get("fab"),
         shape: RoundedRectangleBorder(
           borderRadius:
-              BorderRadius.circular(SizeConfig.blockSizeVertical * 10),
+          BorderRadius.circular(SizeConfig.blockSizeVertical * 10),
         ),
-        onTap: () => onFABPress(context),
+        onTap: () => addFolder(context),
         child: Icon(
           Icons.create,
           color: Color(0xFFDAC279),
@@ -183,7 +217,16 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             // tags list view
-            for (Tag tag in tagsList) buildTagsList(tag),
+            BlocBuilder<TagCubit, List<Tag>>(
+              builder: (context, state) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    for(var tag in state) buildTagsList(tag),
+                  ],
+                );
+              },
+            ),
           ],
         ),
       ),
