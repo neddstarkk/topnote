@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:topnotes/internal/utils/global_key_registry.dart';
-import 'package:topnotes/internal/utils/size_config.dart';
+import 'package:topnotes/internal/global_key_registry.dart';
+import 'package:topnotes/internal/size_config.dart';
 
 class Utils {
   static void showFabMenu(BuildContext context, List<Widget> items) {

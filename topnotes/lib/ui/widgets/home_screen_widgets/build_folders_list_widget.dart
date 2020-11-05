@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:topnotes/data/models/folder_model.dart';
-import 'package:topnotes/internal/utils/constants.dart';
+import 'package:topnotes/internal/constants.dart';
+import 'package:topnotes/ui/screens/new_note.dart';
 
 Widget buildFoldersList(List<Folder> listNew) {
   List<Folder> newList = listNew;
@@ -20,6 +22,9 @@ Widget buildFoldersList(List<Folder> listNew) {
         ),
         trailing: Text("${newList[index].notesUnderFolder.length}",
             style: tileTrailTextStyle),
+        onTap: () {
+          // TODO: Implement folder view
+        },
       );
     },
   );

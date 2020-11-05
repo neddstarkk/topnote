@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:topnotes/internal/utils/constants.dart';
-import 'package:topnotes/internal/utils/size_config.dart';
+import 'package:topnotes/internal/constants.dart';
+import 'package:topnotes/internal/size_config.dart';
 
 class CustomAppBarRow extends StatelessWidget {
   const CustomAppBarRow({
@@ -9,7 +9,6 @@ class CustomAppBarRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
     return Container(
       child: Row(
         children: [
