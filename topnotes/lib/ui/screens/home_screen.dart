@@ -99,8 +99,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       ListTile(
         leading: Icon(
-          Icons.folder,
+          Icons.folder_open_outlined,
           color: Color(0xFF2F4E60),
+
         ),
         title: Text(
           "New Folder",

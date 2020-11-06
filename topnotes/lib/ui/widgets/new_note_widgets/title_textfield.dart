@@ -13,7 +13,10 @@ class TitleTextField extends StatelessWidget {
       cursorColor: Colors.white,
       controller: titleController,
       textCapitalization: TextCapitalization.sentences,
-      style: noteTitleTextStyle.copyWith(fontSize: SizeConfig.blockSizeVertical * 2),
+      style: noteTitleTextStyle.copyWith(
+        fontSize: SizeConfig.blockSizeVertical * 2,
+        fontWeight: FontWeight.bold,
+      ),
       decoration: InputDecoration(
         hintText: "Title",
         hintStyle: noteTitleTextStyle.copyWith(
