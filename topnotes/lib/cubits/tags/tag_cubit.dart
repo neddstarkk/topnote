@@ -7,9 +7,13 @@ class TagCubit extends Cubit<List<Tag>> {
   TagCubit() : super([]);
 
   void addNewTag(String text) {
-    Tag tag = Tag(tagName: text, notesUnderTag: []);
+    Tag tag = Tag(tagName: text, notesUnderTag: [], isSelected: false);
     tagList.add(tag);
 
     emit(tagList);
+  }
+
+  List<Tag> getTagList() {
+    return tagList;
   }
 }

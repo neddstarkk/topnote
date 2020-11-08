@@ -10,4 +10,6 @@ class Note{
   Folder associatedFolder;
   List<Tag> associatedTags;
   DateTime timeStamp;
+
+  Note({this.associatedFolder, this.associatedTags, this.noteId});
 }

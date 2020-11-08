@@ -67,7 +67,6 @@ class _HomeScreenState extends State<HomeScreen> {
             content: TextField(
               controller: controller,
               decoration: InputDecoration(hintText: "Enter Tag Name"),
-              textCapitalization: TextCapitalization.sentences,
             ),
             actions: [
               FlatButton(
