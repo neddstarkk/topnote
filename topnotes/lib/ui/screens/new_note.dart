@@ -7,12 +7,12 @@ import 'package:topnotes/ui/widgets/new_note_widgets/associated_tags_widget.dart
 import 'package:topnotes/ui/widgets/new_note_widgets/content_textfield.dart';
 import 'package:topnotes/ui/widgets/new_note_widgets/title_textfield.dart';
 
-class NewNote extends StatefulWidget {
+class NotePage extends StatefulWidget {
   @override
-  _NewNoteState createState() => _NewNoteState();
+  _NotePageState createState() => _NotePageState();
 }
 
-class _NewNoteState extends State<NewNote> {
+class _NotePageState extends State<NotePage> {
   List<Tag> associatedTagsList = [];
 
   @override

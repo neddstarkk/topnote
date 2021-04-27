@@ -44,7 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
               textCapitalization: TextCapitalization.sentences,
             ),
             actions: [
-              FlatButton(
+              // ignore: deprecated_member_use
+              TextButton(
                 child: Text("ADD"),
                 onPressed: () {
                   final folderCubit = context.bloc<FolderCubit>();
@@ -69,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
               decoration: InputDecoration(hintText: "Enter Tag Name"),
             ),
             actions: [
-              FlatButton(
+              TextButton(
                 child: Text("ADD"),
                 onPressed: () {
                   final tagCubit = context.bloc<TagCubit>();
@@ -100,7 +101,6 @@ class _HomeScreenState extends State<HomeScreen> {
         leading: Icon(
           Icons.folder_open_outlined,
           color: Color(0xFF2F4E60),
-
         ),
         title: Text(
           "New Folder",
@@ -111,21 +111,24 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
       ListTile(
-        leading: Icon(
-          Icons.add,
-          color: Color(0xFFDAC279),
-        ),
-        title: Text(
-          "New Note",
-          style: TextStyle(color: Colors.white70),
-        ),
-        onTap: () => Navigator.push(
-          context,
-          CupertinoPageRoute(
-            builder: (context) => NewNote(),
+          leading: Icon(
+            Icons.add,
+            color: Color(0xFFDAC279),
           ),
-        ),
-      )
+          title: Text(
+            "New Note",
+            style: TextStyle(color: Colors.white70),
+          ),
+          onTap: () {
+            context.bloc<FolderCubit>().addNoteToFolder('General');
+
+            Navigator.push(
+              context,
+              CupertinoPageRoute(
+                builder: (context) => NotePage(),
+              ),
+            );
+          })
     ];
   }
 
@@ -142,8 +145,12 @@ class _HomeScreenState extends State<HomeScreen> {
           borderRadius:
               BorderRadius.circular(SizeConfig.blockSizeVertical * 10),
         ),
-        onTap: () => Navigator.push(
-            context, CupertinoPageRoute(builder: (context) => NewNote())),
+        onTap: () {
+          context.bloc<FolderCubit>().addNoteToFolder('General');
+
+          Navigator.push(
+              context, CupertinoPageRoute(builder: (context) => NotePage()));
+        },
         child: Icon(
           Icons.add,
           color: Color(0xFFDAC279),

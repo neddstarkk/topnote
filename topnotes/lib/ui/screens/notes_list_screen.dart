@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:topnotes/data/models/notes_model.dart';
-import 'package:topnotes/data/models/tags_model.dart';
 import 'package:topnotes/internal/constants.dart';
 import 'package:topnotes/internal/size_config.dart';
 
 class NotesListScreen extends StatefulWidget {
   final String screenTitle;
-  List<Note> notesToBeDisplayed;
+  final List<Note> notesToBeDisplayed;
 
   NotesListScreen(
       {@required this.notesToBeDisplayed, @required this.screenTitle});
@@ -23,26 +22,6 @@ class _NotesListScreenState extends State<NotesListScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    widget.notesToBeDisplayed.add(
-      Note(
-        associatedTags: [Tag(tagName: "plans")],
-        content:
-            "Finally we have decided how to proceed according to the plan. We wont fuck up this time",
-        title: "Instagram Content Plan",
-        timeStamp: DateTime.now(),
-        isFavorite: false,
-      ),
-    );
-    widget.notesToBeDisplayed.add(
-      Note(
-        associatedTags: [Tag(tagName: "branding")],
-        content:
-            "Some design decisions have been taken by the upper management. But we can sift through it.",
-        title: "Ideas about profile branding",
-        timeStamp: DateTime.now(),
-        isFavorite: true,
-      ),
-    );
   }
 
   @override

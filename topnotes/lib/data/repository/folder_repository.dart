@@ -2,8 +2,7 @@ import 'package:topnotes/data/models/folder_model.dart';
 
 class FolderRepository {
   List<Folder> _folderRepo = [
-    Folder(folderName: "hello", notesUnderFolder: []),
-    Folder(folderName: "GoodBye", notesUnderFolder: []),
+    Folder(folderName: "General", notesUnderFolder: []),
   ];
 
   List<Folder> get folders => _folderRepo;
