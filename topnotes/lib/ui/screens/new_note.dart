@@ -183,6 +183,6 @@ class _NewNoteState extends State<NewNote> {
   }
 
   addTagsToNote() {
-    return AlertDialogTags();
+    return AlertDialogTags(associatedTagsList: associatedTagsList,);
   }
 }
