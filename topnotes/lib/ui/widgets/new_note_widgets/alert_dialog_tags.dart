@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:topnotes/cubits/tags/tag_cubit.dart';
-import 'package:topnotes/data/models/tags_model.dart';
 
 class AlertDialogTags extends StatefulWidget {
-
   @override
   _AlertDialogTagsState createState() => _AlertDialogTagsState();
 }
@@ -12,38 +10,35 @@ class AlertDialogTags extends StatefulWidget {
 class _AlertDialogTagsState extends State<AlertDialogTags> {
   @override
   Widget build(BuildContext context) {
+    var state = context.bloc<TagCubit>().getTagList();
+
     return AlertDialog(
       title: Text("Select Tags"),
-      content: BlocBuilder<TagCubit, List<Tag>>(builder: (context, state) {
-        return Container(
-          width: 100,
-          child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: state.length,
-              itemBuilder: (context, index) {
-                return CheckboxListTile(
-                  title: Text("${state[index].tagName}"),
-                  value: state[index].isSelected,
-                  onChanged: (newVal) {
-                    setState(() {
-                      state[index].isSelected = !state[index].isSelected;
-                      if(state[index].isSelected == true) {
+      content: Container(
+        width: 100,
+        child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: state.length,
+            itemBuilder: (context, index) {
+              return CheckboxListTile(
+                title: Text("${state[index].tagName}"),
+                value: state[index].isSelected,
+                onChanged: (newVal) {
+                  setState(() {
+                    state[index].isSelected = newVal;
 
-                      }
-                    });
-                  },
-                );
-              }),
-        );
-      }),
-      actions: [
-        FlatButton(
-          child: Text("ADD"),
-          onPressed: () {
-            final tagCubit = context.bloc<TagCubit>();
-          },
-        )
-      ],
+                    if (state[index].isSelected == true &&
+                        associatedTagsList.indexOf(state[index]) == -1) {
+                      associatedTagsList.add(state[index]);
+                    } else if (state[index].isSelected == false &&
+                        associatedTagsList.indexOf(state[index]) != -1) {
+                      associatedTagsList.remove(state[index]);
+                    }
+                  });
+                },
+              );
+            }),
+      ),
     );
   }
 }

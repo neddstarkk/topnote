@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:topnotes/data/models/folder_model.dart';
+import 'package:topnotes/data/models/notes_model.dart';
 
 class FolderCubit extends Cubit<List<Folder>> {
   List<Folder> folderList = [];

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 BoxDecoration backgroundDecoration = BoxDecoration(color: Color(0xFF0C1720));
 
@@ -7,6 +8,9 @@ TextStyle tagTextStyle = TextStyle(
 );
 
 Color tileIconColor = Color(0xFF2F4A5D);
+
+TextStyle headerTextStyle =
+    TextStyle(color: Colors.white, fontWeight: FontWeight.bold);
 
 TextStyle tileTrailTextStyle = TextStyle(color: Color(0xFF667079));
 

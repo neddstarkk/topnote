@@ -32,7 +32,7 @@ class TopNotesApp extends StatelessWidget {
           iconTheme: IconThemeData(
             color: Colors.white70,
           ),
-          color: Color(0xFF0C1720),
+          color: Color(0xFF101E28),
         ),
       ),
       home: HomeScreen(),

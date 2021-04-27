@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:topnotes/cubits/tags/tag_cubit.dart';
 import 'package:topnotes/data/models/tags_model.dart';
 import 'package:topnotes/internal/size_config.dart';
+import 'package:topnotes/ui/widgets/new_note_widgets/alert_dialog_tags.dart';
 import 'package:topnotes/ui/widgets/new_note_widgets/associated_tags_widget.dart';
 import 'package:topnotes/ui/widgets/new_note_widgets/content_textfield.dart';
 import 'package:topnotes/ui/widgets/new_note_widgets/title_textfield.dart';
@@ -184,35 +183,6 @@ class _NewNoteState extends State<NewNote> {
   }
 
   addTagsToNote() {
-    return AlertDialog(
-      title: Text("Select Tags"),
-      content: BlocBuilder<TagCubit, List<Tag>>(builder: (context, state) {
-        return Container(
-          width: 100,
-          child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: state.length,
-              itemBuilder: (context, index) {
-                return CheckboxListTile(
-                  title: Text("${state[index].tagName}"),
-                  value: state[index].isSelected,
-                  onChanged: (newVal) {
-                    setState(() {
-                      state[index].isSelected = !state[index].isSelected;
-
-                      if (state[index].isSelected == true &&
-                          associatedTagsList.indexOf(state[index]) == -1) {
-                        associatedTagsList.add(state[index]);
-                      } else if (state[index].isSelected == false &&
-                          associatedTagsList.indexOf(state[index]) != -1) {
-                        associatedTagsList.remove(state[index]);
-                      }
-                    });
-                  },
-                );
-              }),
-        );
-      }),
-    );
+    return AlertDialogTags();
   }
 }

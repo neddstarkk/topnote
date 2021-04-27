@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:topnotes/internal/constants.dart';
 import 'package:topnotes/internal/size_config.dart';
 import 'package:topnotes/ui/widgets/home_screen_widgets/custom_appbar_row.dart';
 
@@ -15,10 +16,9 @@ class TopnotesText extends StatelessWidget {
         children: [
           Text(
             "TopNotes",
-            style: TextStyle(
-                fontSize: SizeConfig.blockSizeVertical * 4,
-                color: Colors.white,
-                fontWeight: FontWeight.bold),
+            style: headerTextStyle.copyWith(
+              fontSize: SizeConfig.blockSizeVertical * 4,
+            ),
           ),
           GestureDetector(
             onTap: () {},
