@@ -9,7 +9,7 @@ Widget buildFoldersList(List<Folder> listNew) {
   return ListView.builder(
     physics: NeverScrollableScrollPhysics(),
     shrinkWrap: true,
-    itemCount: newList.length,
+    itemCount: newList.length ,
     itemBuilder: (context, index) {
       return ListTile(
         title: Text(

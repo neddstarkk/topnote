@@ -7,5 +7,5 @@ class Folder {
   String typeOfFolder;
   List<Note> notesUnderFolder;
 
-  Folder({@required this.folderName, this.typeOfFolder, this.notesUnderFolder});
+  Folder({@required this.folderName, this.typeOfFolder,@required this.notesUnderFolder});
 }

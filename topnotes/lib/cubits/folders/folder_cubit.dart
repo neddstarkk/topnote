@@ -1,10 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:topnotes/data/models/folder_model.dart';
-import 'package:topnotes/data/models/notes_model.dart';
+import 'package:topnotes/data/repository/folder_repository.dart';
+
 
 class FolderCubit extends Cubit<List<Folder>> {
-  List<Folder> folderList = [];
-  FolderCubit() : super([]);
+  List<Folder> folderList = repo.folders;
+
+  FolderCubit() : super(repo.folders);
 
 
   void addNewFolder(String text) {
