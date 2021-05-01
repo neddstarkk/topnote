@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:topnotes/cubits/tags/tag_cubit.dart';
 import 'package:topnotes/data/models/tags_model.dart';
 import 'package:topnotes/internal/size_config.dart';
-import 'package:topnotes/ui/widgets/new_note_widgets/alert_dialog_tags.dart';
 
 class BottomAppBarAddButton extends StatelessWidget {
   @override
@@ -89,7 +88,7 @@ class BottomAppBarAddButton extends StatelessWidget {
         );
       }),
       actions: [
-        FlatButton(
+        TextButton(
           child: Text("ADD"),
           onPressed: () {},
         )

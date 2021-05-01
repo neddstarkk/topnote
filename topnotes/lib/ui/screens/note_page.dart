@@ -2,14 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:topnotes/data/models/tags_model.dart';
 import 'package:topnotes/internal/size_config.dart';
-import 'package:topnotes/ui/widgets/new_note_widgets/alert_dialog_tags.dart';
-import 'package:topnotes/ui/widgets/new_note_widgets/associated_tags_widget.dart';
-import 'package:topnotes/ui/widgets/new_note_widgets/content_textfield.dart';
-import 'package:topnotes/ui/widgets/new_note_widgets/title_textfield.dart';
+import 'package:topnotes/ui/widgets/note_page_widgets/alert_dialog_tags.dart';
+import 'package:topnotes/ui/widgets/note_page_widgets/associated_tags_widget.dart';
+import 'package:topnotes/ui/widgets/note_page_widgets/content_textfield.dart';
+import 'package:topnotes/ui/widgets/note_page_widgets/note_taking_mechanisms.dart';
+import 'package:topnotes/ui/widgets/note_page_widgets/title_textfield.dart';
 
 class NotePage extends StatefulWidget {
-
-
   @override
   _NotePageState createState() => _NotePageState();
 }
@@ -71,52 +70,9 @@ class _NotePageState extends State<NotePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // this container will container different types of
+                // this container will contain different types of
                 // note taking mechanisms like lists, images from gallery etc
-                Container(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        width: SizeConfig.blockSizeHorizontal,
-                      ),
-                      ButtonTheme(
-                        minWidth: SizeConfig.blockSizeHorizontal * 8,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                SizeConfig.blockSizeVertical * 5)),
-                        child: TextButton(
-                          onPressed: () {},
-                          child: Icon(
-                            Icons.check_box_outlined,
-                            color: Colors.white70,
-                          ),
-                          style: ButtonStyle(
-                            padding: MaterialStateProperty.all(EdgeInsets.all(0.0)),
-                            backgroundColor: MaterialStateProperty.all(Colors.white70),
-                          ),
-                        ),
-                      ),
-                      ButtonTheme(
-                        minWidth: SizeConfig.blockSizeHorizontal * 8,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                SizeConfig.blockSizeVertical * 5)),
-                        child: TextButton(
-                          onPressed: () {},
-                          child: Icon(
-                            Icons.image_outlined,
-                            color: Colors.white70,
-                          ),
-                          style: ButtonStyle(
-                            padding: MaterialStateProperty.all(EdgeInsets.all(0.0)),
-                            backgroundColor: MaterialStateProperty.all(Colors.white70),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+                NoteTakingMechanisms(),
 
                 // this container will allow user to toggle the bottomsheet that
                 // provides further options to add tags and add note to folder.
@@ -136,43 +92,45 @@ class _NotePageState extends State<NotePage> {
                     ),
                     onPressed: () {
                       showModalBottomSheet(
-                          context: context,
-                          builder: (context) => Container(
-                                height: SizeConfig.blockSizeVertical * 12,
-                                width: SizeConfig.screenWidth,
-                                color: Color(0xFF1A2B37),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    ListTile(
-                                      leading: Icon(
-                                        Icons.folder_open_outlined,
-                                        color: Color(0xFF2F4E60),
-                                      ),
-                                      title: Text(
-                                        "Add to folder",
-                                        style: TextStyle(color: Colors.white70),
-                                      ),
-                                    ),
-                                    ListTile(
-                                      leading: Icon(
-                                        Icons.local_offer_outlined,
-                                        color: Color(0xFF2F4E60),
-                                      ),
-                                      title: Text(
-                                        "Add tags",
-                                        style: TextStyle(color: Colors.white70),
-                                      ),
-                                      onTap: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) => addTagsToNote(),
-                                        );
-                                      },
-                                    ),
-                                  ],
+                        context: context,
+                        builder: (context) => Container(
+                          height: SizeConfig.blockSizeVertical * 12,
+                          width: SizeConfig.screenWidth,
+                          color: Color(0xFF1A2B37),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              ListTile(
+                                leading: Icon(
+                                  Icons.folder_open_outlined,
+                                  color: Color(0xFF2F4E60),
                                 ),
-                              ));
+                                title: Text(
+                                  "Add to folder",
+                                  style: TextStyle(color: Colors.white70),
+                                ),
+                                onTap: addNoteToFolder(),
+                              ),
+                              ListTile(
+                                leading: Icon(
+                                  Icons.local_offer_outlined,
+                                  color: Color(0xFF2F4E60),
+                                ),
+                                title: Text(
+                                  "Add tags",
+                                  style: TextStyle(color: Colors.white70),
+                                ),
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => addTagsToNote(),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
                     },
                     child: Icon(
                       Icons.more_vert,
@@ -188,7 +146,15 @@ class _NotePageState extends State<NotePage> {
     );
   }
 
+  addNoteToFolder() {
+    // TODO: Implement note to folder functionality
+  }
+
   addTagsToNote() {
-    return AlertDialogTags(associatedTagsList: associatedTagsList,);
+    return AlertDialogTags(
+      associatedTagsList: associatedTagsList,
+    );
   }
 }
+
+
