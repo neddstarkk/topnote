@@ -25,14 +25,16 @@ class FolderCubit extends Cubit<List<Folder>> {
     var targetFolder =
         folderList.firstWhere((folder) => folder.folderName == nameOfFolder);
 
+    var stampTime = DateTime.now();
+
     targetFolder.notesUnderFolder.add(
       Note(
-        noteId: ValueKey(DateTime.now()).toString(),
+        noteId: stampTime.toString(),
         title: 'Hello',
         content: 'World',
         associatedFolder: targetFolder,
         associatedTags: [],
-        timeStamp: DateTime.now(),
+        timeStamp: stampTime,
         isFavorite: false,
       ),
     );

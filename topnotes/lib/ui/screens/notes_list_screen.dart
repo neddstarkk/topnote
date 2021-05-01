@@ -50,7 +50,7 @@ class _NotesListScreenState extends State<NotesListScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: SizeConfig.blockSizeHorizontal * 4),
-                child: GridView.builder(
+                child: widget.notesToBeDisplayed.length == 0 ? Center(child: Text("Empty State", style: TextStyle(color: Colors.white),),) : GridView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: widget.notesToBeDisplayed.length,

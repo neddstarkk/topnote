@@ -9,7 +9,7 @@ import 'package:topnotes/data/models/tags_model.dart';
 import 'package:topnotes/internal/global_key_registry.dart';
 import 'package:topnotes/internal/show_fab_menu.dart';
 import 'package:topnotes/internal/size_config.dart';
-import 'package:topnotes/ui/screens/new_note.dart';
+import 'package:topnotes/ui/screens/note_page.dart';
 import 'package:topnotes/ui/widgets/home_screen_widgets/build_folders_list_widget.dart';
 import 'package:topnotes/ui/widgets/home_screen_widgets/build_tags_list_widget.dart';
 import 'package:topnotes/ui/widgets/home_screen_widgets/fake_fab.dart';
@@ -111,24 +111,23 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
       ListTile(
-          leading: Icon(
-            Icons.add,
-            color: Color(0xFFDAC279),
-          ),
-          title: Text(
-            "New Note",
-            style: TextStyle(color: Colors.white70),
-          ),
-          onTap: () {
-            context.bloc<FolderCubit>().addNoteToFolder('General');
-
-            Navigator.push(
-              context,
-              CupertinoPageRoute(
-                builder: (context) => NotePage(),
-              ),
-            );
-          })
+        leading: Icon(
+          Icons.add,
+          color: Color(0xFFDAC279),
+        ),
+        title: Text(
+          "New Note",
+          style: TextStyle(color: Colors.white70),
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            CupertinoPageRoute(
+              builder: (context) => NotePage(),
+            ),
+          );
+        },
+      ),
     ];
   }
 
@@ -146,8 +145,6 @@ class _HomeScreenState extends State<HomeScreen> {
               BorderRadius.circular(SizeConfig.blockSizeVertical * 10),
         ),
         onTap: () {
-          context.bloc<FolderCubit>().addNoteToFolder('General');
-
           Navigator.push(
               context, CupertinoPageRoute(builder: (context) => NotePage()));
         },
