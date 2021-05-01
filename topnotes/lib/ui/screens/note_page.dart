@@ -8,6 +8,8 @@ import 'package:topnotes/ui/widgets/new_note_widgets/content_textfield.dart';
 import 'package:topnotes/ui/widgets/new_note_widgets/title_textfield.dart';
 
 class NotePage extends StatefulWidget {
+
+
   @override
   _NotePageState createState() => _NotePageState();
 }
@@ -83,14 +85,16 @@ class _NotePageState extends State<NotePage> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                                 SizeConfig.blockSizeVertical * 5)),
-                        child: FlatButton(
+                        child: TextButton(
                           onPressed: () {},
                           child: Icon(
                             Icons.check_box_outlined,
                             color: Colors.white70,
                           ),
-                          splashColor: Colors.white70,
-                          padding: EdgeInsets.all(0.0),
+                          style: ButtonStyle(
+                            padding: MaterialStateProperty.all(EdgeInsets.all(0.0)),
+                            backgroundColor: MaterialStateProperty.all(Colors.white70),
+                          ),
                         ),
                       ),
                       ButtonTheme(
@@ -98,14 +102,16 @@ class _NotePageState extends State<NotePage> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                                 SizeConfig.blockSizeVertical * 5)),
-                        child: FlatButton(
+                        child: TextButton(
                           onPressed: () {},
                           child: Icon(
                             Icons.image_outlined,
                             color: Colors.white70,
                           ),
-                          splashColor: Colors.white70,
-                          padding: EdgeInsets.all(0.0),
+                          style: ButtonStyle(
+                            padding: MaterialStateProperty.all(EdgeInsets.all(0.0)),
+                            backgroundColor: MaterialStateProperty.all(Colors.white70),
+                          ),
                         ),
                       )
                     ],
