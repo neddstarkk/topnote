@@ -22,12 +22,23 @@ class FolderCubit extends Cubit<List<Folder>> {
   }
 
   void addNoteToFolder(String nameOfFolder, Note note) {
-    var targetFolder =
+    Folder targetFolder =
         folderList.firstWhere((folder) => folder.folderName == nameOfFolder);
 
     targetFolder.notesUnderFolder.add(note);
 
-    print("Reached here");
+    emit(folderList);
+  }
+
+  void updateNote(String nameOfFolder, Note note) {
+    Folder targetFolder =
+        folderList.firstWhere((folder) => folder.folderName == nameOfFolder);
+
+    var targetNote = targetFolder.notesUnderFolder.firstWhere((element) => element.noteId == note.noteId);
+
+    targetFolder.notesUnderFolder.remove(targetNote);
+    targetNote = note;
+    targetFolder.notesUnderFolder.add(targetNote);
 
     emit(folderList);
   }

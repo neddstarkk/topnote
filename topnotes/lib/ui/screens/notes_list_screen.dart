@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:topnotes/data/models/notes_model.dart';
 import 'package:topnotes/internal/constants.dart';
 import 'package:topnotes/internal/size_config.dart';
+import 'package:topnotes/ui/screens/note_page.dart';
 
 class NotesListScreen extends StatefulWidget {
   final String screenTitle;
@@ -50,98 +51,124 @@ class _NotesListScreenState extends State<NotesListScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: SizeConfig.blockSizeHorizontal * 4),
-                child: widget.notesToBeDisplayed.length == 0 ? Center(child: Text("Empty State", style: TextStyle(color: Colors.white),),) : GridView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: widget.notesToBeDisplayed.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 1,
-                    mainAxisSpacing: SizeConfig.blockSizeVertical * 2,
-                    crossAxisSpacing: SizeConfig.blockSizeHorizontal * 2,
-                    childAspectRatio: 3.0,
-                  ),
-                  itemBuilder: (context, index) => Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white10,
-                      borderRadius:
-                          BorderRadius.circular(SizeConfig.blockSizeHorizontal),
-                    ),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: SizeConfig.blockSizeHorizontal * 5,
-                      vertical: SizeConfig.blockSizeVertical * 2.5,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                              bottom: SizeConfig.blockSizeHorizontal),
-                          child: Text(
-                            "${widget.notesToBeDisplayed[index].title}",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: SizeConfig.blockSizeVertical * 2),
-                          ),
+                child: widget.notesToBeDisplayed.length == 0
+                    ? Center(
+                        child: Text(
+                          "Empty State",
+                          style: TextStyle(color: Colors.white),
                         ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              "${widget.notesToBeDisplayed[index].timeStamp}",
-                              overflow: TextOverflow.fade,
-                              style: TextStyle(color: Colors.white38),
+                      )
+                    : GridView.builder(
+                        reverse: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: widget.notesToBeDisplayed.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 1,
+                          mainAxisSpacing: SizeConfig.blockSizeVertical * 2,
+                          crossAxisSpacing: SizeConfig.blockSizeHorizontal * 2,
+                          childAspectRatio: 3.0,
+                        ),
+                        itemBuilder: (context, index) => GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                  builder: (context) => NotePage(
+                                    note: widget.notesToBeDisplayed[index],
+                                  ),
+                                ));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white10,
+                              borderRadius: BorderRadius.circular(
+                                  SizeConfig.blockSizeHorizontal),
                             ),
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                    left: SizeConfig.blockSizeHorizontal * 3),
-                                child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: SizeConfig.blockSizeHorizontal * 5,
+                              vertical: SizeConfig.blockSizeVertical * 2.5,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      bottom: SizeConfig.blockSizeHorizontal),
                                   child: Text(
-                                    "${widget.notesToBeDisplayed[index].content}",
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: TextStyle(color: Colors.white30),
+                                    "${widget.notesToBeDisplayed[index].title}",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize:
+                                            SizeConfig.blockSizeVertical * 2),
                                   ),
                                 ),
-                              ),
-                            )
-                          ],
-                        ),
-                        SizedBox(
-                          height: SizeConfig.blockSizeVertical * 2,
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            for (var tag in widget
-                                .notesToBeDisplayed[index].associatedTags)
-                              Container(
-                                padding: EdgeInsets.all(
-                                    SizeConfig.blockSizeHorizontal),
-                                decoration: BoxDecoration(
-                                    color: Color(0xFF687581),
-                                    borderRadius: BorderRadius.circular(
-                                        SizeConfig.blockSizeVertical * 10)),
-                                child: Text(
-                                  "#${tag.tagName}",
-                                  style: TextStyle(color: Colors.white70),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      "${widget.notesToBeDisplayed[index].timeStamp}",
+                                      overflow: TextOverflow.fade,
+                                      style: TextStyle(color: Colors.white38),
+                                    ),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                            left:
+                                                SizeConfig.blockSizeHorizontal *
+                                                    3),
+                                        child: Container(
+                                          child: Text(
+                                            "${widget.notesToBeDisplayed[index].content}",
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                            style: TextStyle(
+                                                color: Colors.white30),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
                                 ),
-                              ),
-                            Spacer(),
-                            Icon(
-                              Icons.star,
-                              color:
-                              widget.notesToBeDisplayed[index].isFavorite ==
-                                          true
-                                      ? Colors.yellowAccent
-                                      : Colors.white10,
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
+                                SizedBox(
+                                  height: SizeConfig.blockSizeVertical * 2,
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    for (var tag in widget
+                                        .notesToBeDisplayed[index]
+                                        .associatedTags)
+                                      Container(
+                                        padding: EdgeInsets.all(
+                                            SizeConfig.blockSizeHorizontal),
+                                        decoration: BoxDecoration(
+                                            color: Color(0xFF687581),
+                                            borderRadius: BorderRadius.circular(
+                                                SizeConfig.blockSizeVertical *
+                                                    10)),
+                                        child: Text(
+                                          "#${tag.tagName}",
+                                          style:
+                                              TextStyle(color: Colors.white70),
+                                        ),
+                                      ),
+                                    Spacer(),
+                                    Icon(
+                                      Icons.star,
+                                      color: widget.notesToBeDisplayed[index]
+                                                  .isFavorite ==
+                                              true
+                                          ? Colors.yellowAccent
+                                          : Colors.white10,
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
               ),
             ],
           ),

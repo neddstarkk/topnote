@@ -26,6 +26,15 @@ class _NotePageState extends State<NotePage> {
   TextEditingController titleController = TextEditingController();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(widget.note != null) {
+      titleController.text = widget.note.title;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -80,7 +89,9 @@ class _NotePageState extends State<NotePage> {
                 }
                 // a note object exists
                 else {
-                  print(text);
+                  widget.note.title = text;
+
+                  BlocProvider.of<FolderCubit>(context).updateNote('General', widget.note);
                 }
               },
             ),
