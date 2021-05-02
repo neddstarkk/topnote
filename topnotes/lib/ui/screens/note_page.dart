@@ -1,26 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:topnotes/cubits/folders/folder_cubit.dart';
+import 'package:topnotes/data/models/folder_model.dart';
+import 'package:topnotes/data/models/notes_model.dart';
 import 'package:topnotes/data/models/tags_model.dart';
+import 'package:topnotes/internal/constants.dart';
 import 'package:topnotes/internal/size_config.dart';
-import 'package:topnotes/ui/widgets/note_page_widgets/alert_dialog_tags.dart';
 import 'package:topnotes/ui/widgets/note_page_widgets/associated_tags_widget.dart';
 import 'package:topnotes/ui/widgets/note_page_widgets/content_textfield.dart';
+import 'package:topnotes/ui/widgets/note_page_widgets/note_additions.dart';
 import 'package:topnotes/ui/widgets/note_page_widgets/note_taking_mechanisms.dart';
-import 'package:topnotes/ui/widgets/note_page_widgets/title_textfield.dart';
 
 class NotePage extends StatefulWidget {
+  Note note;
+
+  NotePage({this.note});
+
   @override
   _NotePageState createState() => _NotePageState();
 }
 
 class _NotePageState extends State<NotePage> {
   List<Tag> associatedTagsList = [];
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
+  TextEditingController titleController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +45,45 @@ class _NotePageState extends State<NotePage> {
         child: Column(
           children: [
             // title textfield
-            TitleTextField(),
+            TextField(
+              cursorColor: Colors.white,
+              controller: titleController,
+              textCapitalization: TextCapitalization.sentences,
+              style: noteTitleTextStyle.copyWith(
+                fontSize: SizeConfig.blockSizeVertical * 2,
+                fontWeight: FontWeight.bold,
+              ),
+              decoration: InputDecoration(
+                hintText: "Title",
+                hintStyle: noteTitleTextStyle.copyWith(
+                    fontSize: SizeConfig.blockSizeVertical * 2),
+                border: InputBorder.none,
+              ),
+              onChanged: (text) {
+                // if this is a new note and a change has just been made.
+                if (titleController.text.length == 1 && widget.note == null) {
+                  // TODO: Assign a nodeID, update title, associate folder general,
+                  var time = DateTime.now();
+                  var newNote = Note(
+                    noteId: time.toString(),
+                    title: text,
+                    associatedFolder: 'General',
+                    associatedTags: [],
+                    isFavorite: false,
+                    content: '',
+                    timeStamp: time,
+                  );
+
+                  widget.note = newNote;
+
+                  BlocProvider.of<FolderCubit>(context).addNoteToFolder('General', newNote);
+                }
+                // a note object exists
+                else {
+                  print(text);
+                }
+              },
+            ),
 
             // associated tags Container
 
@@ -76,67 +117,8 @@ class _NotePageState extends State<NotePage> {
 
                 // this container will allow user to toggle the bottomsheet that
                 // provides further options to add tags and add note to folder.
-                Container(
-                  height: SizeConfig.blockSizeVertical * 5,
-                  width: SizeConfig.blockSizeVertical * 6,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(SizeConfig.blockSizeVertical * 1.6),
-                    ),
-                  ),
-                  child: MaterialButton(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(SizeConfig.blockSizeVertical * 1.6),
-                      ),
-                    ),
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (context) => Container(
-                          height: SizeConfig.blockSizeVertical * 12,
-                          width: SizeConfig.screenWidth,
-                          color: Color(0xFF1A2B37),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              ListTile(
-                                leading: Icon(
-                                  Icons.folder_open_outlined,
-                                  color: Color(0xFF2F4E60),
-                                ),
-                                title: Text(
-                                  "Add to folder",
-                                  style: TextStyle(color: Colors.white70),
-                                ),
-                                onTap: addNoteToFolder(),
-                              ),
-                              ListTile(
-                                leading: Icon(
-                                  Icons.local_offer_outlined,
-                                  color: Color(0xFF2F4E60),
-                                ),
-                                title: Text(
-                                  "Add tags",
-                                  style: TextStyle(color: Colors.white70),
-                                ),
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => addTagsToNote(),
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                    child: Icon(
-                      Icons.more_vert,
-                      color: Colors.white70,
-                    ),
-                  ),
+                NoteAdditions(
+                  associatedTagsList: associatedTagsList,
                 ),
               ],
             ),
@@ -145,16 +127,4 @@ class _NotePageState extends State<NotePage> {
       ),
     );
   }
-
-  addNoteToFolder() {
-    // TODO: Implement note to folder functionality
-  }
-
-  addTagsToNote() {
-    return AlertDialogTags(
-      associatedTagsList: associatedTagsList,
-    );
-  }
 }
-
-

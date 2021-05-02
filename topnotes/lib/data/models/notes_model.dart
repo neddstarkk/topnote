@@ -6,7 +6,7 @@ class Note {
   String title;
   String content;
 
-  Folder associatedFolder;
+  String associatedFolder;
   List<Tag> associatedTags;
   DateTime timeStamp;
 

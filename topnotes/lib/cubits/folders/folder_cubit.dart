@@ -21,23 +21,13 @@ class FolderCubit extends Cubit<List<Folder>> {
     emit(folderList);
   }
 
-  void addNoteToFolder(String nameOfFolder) {
+  void addNoteToFolder(String nameOfFolder, Note note) {
     var targetFolder =
         folderList.firstWhere((folder) => folder.folderName == nameOfFolder);
 
-    var stampTime = DateTime.now();
+    targetFolder.notesUnderFolder.add(note);
 
-    targetFolder.notesUnderFolder.add(
-      Note(
-        noteId: stampTime.toString(),
-        title: 'Hello',
-        content: 'World',
-        associatedFolder: targetFolder,
-        associatedTags: [],
-        timeStamp: stampTime,
-        isFavorite: false,
-      ),
-    );
+    print("Reached here");
 
     emit(folderList);
   }
