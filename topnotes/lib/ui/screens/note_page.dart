@@ -42,7 +42,7 @@ class _NotePageState extends State<NotePage> {
           Padding(
             padding: EdgeInsets.only(right: SizeConfig.blockSizeHorizontal * 3),
             child: Icon(
-              Icons.favorite_border_outlined,
+              Icons.star_border_outlined,
             ),
           ),
         ],
