@@ -43,6 +43,15 @@ class FolderCubit extends Cubit<List<Folder>> {
     emit(folderList);
   }
 
+  void removeNoteFromFolder(String nameOfFolder, Note note) {
+    Folder targetFolder =
+    folderList.firstWhere((folder) => folder.folderName == nameOfFolder);
+
+    targetFolder.notesUnderFolder.removeWhere((element) => element.noteId == note.noteId);
+
+    emit(folderList);
+  }
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;

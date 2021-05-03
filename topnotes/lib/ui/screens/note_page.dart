@@ -6,7 +6,7 @@ import 'package:topnotes/data/models/notes_model.dart';
 import 'package:topnotes/internal/constants.dart';
 import 'package:topnotes/internal/size_config.dart';
 import 'package:topnotes/ui/widgets/note_page_widgets/associated_tags_widget.dart';
-import 'package:topnotes/ui/widgets/note_page_widgets/note_additions.dart';
+import 'package:topnotes/ui/widgets/note_page_widgets/note_operations.dart';
 import 'package:topnotes/ui/widgets/note_page_widgets/note_taking_mechanisms.dart';
 
 class NotePage extends StatefulWidget {
@@ -26,7 +26,7 @@ class _NotePageState extends State<NotePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if(widget.note != null) {
+    if (widget.note != null) {
       titleController.text = widget.note.title;
       contentController.text = widget.note.content;
     }
@@ -81,12 +81,21 @@ class _NotePageState extends State<NotePage> {
                   );
 
                   widget.note = newNote;
-                  BlocProvider.of<FolderCubit>(context).addNoteToFolder('General', newNote);
+                  BlocProvider.of<FolderCubit>(context)
+                      .addNoteToFolder(widget.note.associatedFolder, newNote);
                 }
                 // a note object exists
                 else {
                   widget.note.title = text;
-                  BlocProvider.of<FolderCubit>(context).updateNote('General', widget.note);
+                  BlocProvider.of<FolderCubit>(context)
+                      .updateNote(widget.note.associatedFolder, widget.note);
+                }
+
+                if (contentController.text.length == 0 &&
+                    titleController.text.length == 0 &&
+                    widget.note != null) {
+                  BlocProvider.of<FolderCubit>(context).removeNoteFromFolder(
+                      widget.note.associatedFolder, widget.note);
                 }
               },
             ),
@@ -96,8 +105,10 @@ class _NotePageState extends State<NotePage> {
             Container(
               child: Row(
                 children: [
-                  if (widget.note != null && widget.note.associatedTags.isNotEmpty)
-                    for (var tag in widget.note.associatedTags) showAssociatedTags(tag),
+                  if (widget.note != null &&
+                      widget.note.associatedTags.isNotEmpty)
+                    for (var tag in widget.note.associatedTags)
+                      showAssociatedTags(tag),
                 ],
               ),
             ),
@@ -119,7 +130,7 @@ class _NotePageState extends State<NotePage> {
                 ),
               ),
               onChanged: (text) {
-                if(contentController.text.length == 1 && widget.note == null) {
+                if (contentController.text.length == 1 && widget.note == null) {
                   var time = DateTime.now();
                   var newNote = Note(
                     noteId: time.toString(),
@@ -132,11 +143,19 @@ class _NotePageState extends State<NotePage> {
                   );
 
                   widget.note = newNote;
-                  BlocProvider.of<FolderCubit>(context).addNoteToFolder('General', newNote);
-                }
-                else {
+                  BlocProvider.of<FolderCubit>(context)
+                      .addNoteToFolder(widget.note.associatedFolder, newNote);
+                } else {
                   widget.note.content = text;
-                  BlocProvider.of<FolderCubit>(context).updateNote('General', widget.note);
+                  BlocProvider.of<FolderCubit>(context)
+                      .updateNote('General', widget.note);
+                }
+
+                if (contentController.text.length == 0 &&
+                    titleController.text.length == 0 &&
+                    widget.note != null) {
+                  BlocProvider.of<FolderCubit>(context).removeNoteFromFolder(
+                      widget.note.associatedFolder, widget.note);
                 }
               },
             ),
@@ -159,8 +178,8 @@ class _NotePageState extends State<NotePage> {
 
                 // this container will allow user to toggle the bottomsheet that
                 // provides further options to add tags and add note to folder.
-                NoteAdditions(
-                  associatedTagsList: widget.note != null ? widget.note.associatedTags : [],
+                NoteOperations(
+                  note: widget.note != null ? widget.note : null,
                 ),
               ],
             ),

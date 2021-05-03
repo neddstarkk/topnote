@@ -1,16 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:topnotes/cubits/tags/tag_cubit.dart';
+import 'package:topnotes/data/models/notes_model.dart';
 import 'package:topnotes/data/models/tags_model.dart';
 import 'package:topnotes/internal/size_config.dart';
 
 import 'alert_dialog_tags.dart';
 
-class NoteAdditions extends StatelessWidget {
-  final List<Tag> associatedTagsList;
+class NoteOperations extends StatefulWidget {
+  final Note note ;
 
-  NoteAdditions({
-    this.associatedTagsList,
+  NoteOperations({
+    this.note,
     Key key,
   }) : super(key: key);
+
+  @override
+  _NoteOperationsState createState() => _NoteOperationsState();
+}
+
+class _NoteOperationsState extends State<NoteOperations> {
+  List<Tag> tags;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    tags = BlocProvider.of<TagCubit>(context).getTagList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,11 +62,12 @@ class NoteAdditions extends StatelessWidget {
                       color: Color(0xFF2F4E60),
                     ),
                     title: Text(
-                      "Add to folder",
+                      "Move to folder",
                       style: TextStyle(color: Colors.white70),
                     ),
                   ),
                   ListTile(
+                    enabled: tags.isNotEmpty && widget.note != null ? true : false,
                     leading: Icon(
                       Icons.local_offer_outlined,
                       color: Color(0xFF2F4E60),
@@ -62,7 +80,7 @@ class NoteAdditions extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialogTags(
-                          associatedTagsList: associatedTagsList,
+                          associatedTagsList: tags,
                         ),
                       );
                     },
