@@ -4,6 +4,7 @@ import 'package:topnotes/data/models/notes_model.dart';
 import 'package:topnotes/internal/constants.dart';
 import 'package:topnotes/internal/size_config.dart';
 import 'package:topnotes/ui/screens/note_page.dart';
+import 'package:topnotes/ui/widgets/notes_list_page_widgets/empty_state_widget.dart';
 
 class NotesListScreen extends StatefulWidget {
   final String screenTitle;
@@ -40,57 +41,7 @@ class _NotesListScreenState extends State<NotesListScreen> {
       11: "November",
       12: "December",
     };
-
-    var now = DateTime.now();
-
-    if (now
-        .difference(timeStamp)
-        .inDays == 0) {
-      if (now
-          .difference(timeStamp)
-          .inHours > 8) {
-        return "Today";
-      }
-      else if (now
-          .difference(timeStamp)
-          .inHours > 2) {
-        return "A few hours ago";
-      }
-      else {
-        if (now
-            .difference(timeStamp)
-            .inHours == 0) {
-          if (now
-              .difference(timeStamp)
-              .inMinutes >= 45) {
-            return "An hour ago";
-          }
-          else if (now
-              .difference(timeStamp)
-              .inMinutes >= 25) {
-            return "30 minutes ago";
-          }
-          else {
-            if (now
-                .difference(timeStamp)
-                .inMinutes > 1) {
-              return "a few minutes ago";
-            }
-            else if (now
-                .difference(timeStamp)
-                .inMinutes < 1) {
-              return "a few seconds ago";
-            }
-          }
-        }
-      }
-    }
-    else if (now
-        .difference(timeStamp)
-        .inDays == 1) {
-      return "Yesterday";
-    }
-    else return "${timeStamp.day} ${monthsInYear[timeStamp.month]}, ${timeStamp.year}";
+    return "${timeStamp.day} ${monthsInYear[timeStamp.month]}, ${timeStamp.year}";
   }
 
   @override
@@ -123,12 +74,7 @@ class _NotesListScreenState extends State<NotesListScreen> {
                 padding: EdgeInsets.symmetric(
                     horizontal: SizeConfig.blockSizeHorizontal * 4),
                 child: widget.notesToBeDisplayed.length == 0
-                    ? Center(
-                  child: Text(
-                    "Empty State",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                )
+                    ? EmptyStateWidget()
                     : GridView.builder(
                   reverse: true,
                   physics: NeverScrollableScrollPhysics(),
