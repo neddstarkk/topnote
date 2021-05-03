@@ -75,7 +75,7 @@ class _NotePageState extends State<NotePage> {
                     var newNote = Note(
                       noteId: time.toString(),
                       title: text,
-                      associatedFolder: 'General',
+                      associatedFolder: 'All Notes',
                       associatedTags: [],
                       isFavorite: false,
                       content: '',
@@ -135,13 +135,11 @@ class _NotePageState extends State<NotePage> {
                   RegExp lineBreaks = RegExp("[\\n\\r]+");
                   if (contentController.text.length > 0 && widget.note == null && !lineBreaks.hasMatch(text)) {
 
-                    print("This thot aint empty bish");
-
                     var time = DateTime.now();
                     var newNote = Note(
                       noteId: time.toString(),
                       title: '',
-                      associatedFolder: 'General',
+                      associatedFolder: 'All Notes',
                       associatedTags: [],
                       isFavorite: false,
                       content: text,
@@ -156,7 +154,7 @@ class _NotePageState extends State<NotePage> {
 
                     widget.note.content = text;
                     BlocProvider.of<FolderCubit>(context)
-                        .updateNote('General', widget.note);
+                        .updateNote(widget.note.associatedFolder, widget.note);
                   }
 
                   if (contentController.text.length == 0 &&

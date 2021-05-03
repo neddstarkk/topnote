@@ -16,8 +16,8 @@ Widget buildFoldersList(List<Folder> listNew) {
           "${newList[index].folderName}",
           style: TextStyle(color: Colors.white),
         ),
-        leading: Icon(
-          Icons.folder,
+        leading: newList[index].icon != null ? newList[index].icon : Icon(
+          Icons.folder_outlined,
           color: tileIconColor,
         ),
         trailing: Text("${newList[index].notesUnderFolder.length}",

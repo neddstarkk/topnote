@@ -6,6 +6,7 @@ class Folder {
   String folderName;
   String typeOfFolder;
   List<Note> notesUnderFolder;
+  Icon icon;
 
-  Folder({@required this.folderName, this.typeOfFolder,@required this.notesUnderFolder});
+  Folder({@required this.folderName, this.typeOfFolder,@required this.notesUnderFolder, this.icon});
 }
