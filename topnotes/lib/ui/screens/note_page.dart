@@ -49,117 +49,126 @@ class _NotePageState extends State<NotePage> {
       ),
       body: Padding(
         padding: EdgeInsets.only(left: SizeConfig.blockSizeHorizontal * 3),
-        child: Column(
-          children: [
-            // title textfield
-            TextField(
-              cursorColor: Colors.white,
-              controller: titleController,
-              textCapitalization: TextCapitalization.sentences,
-              style: noteTitleTextStyle.copyWith(
-                fontSize: SizeConfig.blockSizeVertical * 2,
-                fontWeight: FontWeight.bold,
-              ),
-              decoration: InputDecoration(
-                hintText: "Title",
-                hintStyle: noteTitleTextStyle.copyWith(
-                    fontSize: SizeConfig.blockSizeVertical * 2),
-                border: InputBorder.none,
-              ),
-              onChanged: (text) {
-                // if this is a new note and a change has just been made.
-                if (titleController.text.length == 1 && widget.note == null) {
-                  var time = DateTime.now();
-                  var newNote = Note(
-                    noteId: time.toString(),
-                    title: text,
-                    associatedFolder: 'General',
-                    associatedTags: [],
-                    isFavorite: false,
-                    content: '',
-                    timeStamp: time,
-                  );
-
-                  widget.note = newNote;
-                  BlocProvider.of<FolderCubit>(context)
-                      .addNoteToFolder(widget.note.associatedFolder, newNote);
-                }
-                // a note object exists
-                else {
-                  widget.note.title = text;
-                  BlocProvider.of<FolderCubit>(context)
-                      .updateNote(widget.note.associatedFolder, widget.note);
-                }
-
-                if (contentController.text.length == 0 &&
-                    titleController.text.length == 0 &&
-                    widget.note != null) {
-                  BlocProvider.of<FolderCubit>(context).removeNoteFromFolder(
-                      widget.note.associatedFolder, widget.note);
-                }
-              },
-            ),
-
-            // associated tags Container
-
-            Container(
-              child: Row(
-                children: [
-                  if (widget.note != null &&
-                      widget.note.associatedTags.isNotEmpty)
-                    for (var tag in widget.note.associatedTags)
-                      showAssociatedTags(tag),
-                ],
-              ),
-            ),
-
-            // content textfield,
-            TextField(
-              controller: contentController,
-              cursorColor: Colors.white,
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-              style: noteTitleTextStyle.copyWith(
-                fontSize: SizeConfig.blockSizeVertical * 2,
-              ),
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: "Content",
-                hintStyle: noteContentTextStyle.copyWith(
+        child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          child: Column(
+            children: [
+              // title textfield
+              TextField(
+                cursorColor: Colors.white,
+                controller: titleController,
+                textCapitalization: TextCapitalization.sentences,
+                style: noteTitleTextStyle.copyWith(
                   fontSize: SizeConfig.blockSizeVertical * 2,
+                  fontWeight: FontWeight.bold,
+                ),
+                decoration: InputDecoration(
+                  hintText: "Title",
+                  hintStyle: noteTitleTextStyle.copyWith(
+                      fontSize: SizeConfig.blockSizeVertical * 2),
+                  border: InputBorder.none,
+                ),
+                onChanged: (text) {
+                  // if this is a new note and a change has just been made.
+                  if (titleController.text.length == 1 && widget.note == null) {
+                    var time = DateTime.now();
+                    var newNote = Note(
+                      noteId: time.toString(),
+                      title: text,
+                      associatedFolder: 'General',
+                      associatedTags: [],
+                      isFavorite: false,
+                      content: '',
+                      timeStamp: time,
+                    );
+
+                    widget.note = newNote;
+                    BlocProvider.of<FolderCubit>(context)
+                        .addNoteToFolder(widget.note.associatedFolder, newNote);
+                  }
+                  // a note object exists
+                  else {
+                    widget.note.title = text;
+                    BlocProvider.of<FolderCubit>(context)
+                        .updateNote(widget.note.associatedFolder, widget.note);
+                  }
+
+                  if (contentController.text.length == 0 &&
+                      titleController.text.length == 0 &&
+                      widget.note != null) {
+                    BlocProvider.of<FolderCubit>(context).removeNoteFromFolder(
+                        widget.note.associatedFolder, widget.note);
+                  }
+                },
+              ),
+
+              // associated tags Container
+
+              Container(
+                child: Row(
+                  children: [
+                    if (widget.note != null &&
+                        widget.note.associatedTags.isNotEmpty)
+                      for (var tag in widget.note.associatedTags)
+                        showAssociatedTags(tag),
+                  ],
                 ),
               ),
-              onChanged: (text) {
-                if (contentController.text.length == 1 && widget.note == null) {
-                  var time = DateTime.now();
-                  var newNote = Note(
-                    noteId: time.toString(),
-                    title: '',
-                    associatedFolder: 'General',
-                    associatedTags: [],
-                    isFavorite: false,
-                    content: text,
-                    timeStamp: time,
-                  );
 
-                  widget.note = newNote;
-                  BlocProvider.of<FolderCubit>(context)
-                      .addNoteToFolder(widget.note.associatedFolder, newNote);
-                } else {
-                  widget.note.content = text;
-                  BlocProvider.of<FolderCubit>(context)
-                      .updateNote('General', widget.note);
-                }
+              // content textfield,
+              TextField(
+                controller: contentController,
+                cursorColor: Colors.white,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                style: noteTitleTextStyle.copyWith(
+                  fontSize: SizeConfig.blockSizeVertical * 2,
+                ),
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: "Content",
+                  hintStyle: noteContentTextStyle.copyWith(
+                    fontSize: SizeConfig.blockSizeVertical * 2,
+                  ),
+                ),
+                onChanged: (text) {
+                  RegExp lineBreaks = RegExp("[\\n\\r]+");
+                  if (contentController.text.length > 0 && widget.note == null && !lineBreaks.hasMatch(text)) {
 
-                if (contentController.text.length == 0 &&
-                    titleController.text.length == 0 &&
-                    widget.note != null) {
-                  BlocProvider.of<FolderCubit>(context).removeNoteFromFolder(
-                      widget.note.associatedFolder, widget.note);
-                }
-              },
-            ),
-          ],
+                    print("This thot aint empty bish");
+
+                    var time = DateTime.now();
+                    var newNote = Note(
+                      noteId: time.toString(),
+                      title: '',
+                      associatedFolder: 'General',
+                      associatedTags: [],
+                      isFavorite: false,
+                      content: text,
+                      timeStamp: time,
+                    );
+
+                    widget.note = newNote;
+                    BlocProvider.of<FolderCubit>(context)
+                        .addNoteToFolder(widget.note.associatedFolder, newNote);
+                  } else if (widget.note != null){
+
+
+                    widget.note.content = text;
+                    BlocProvider.of<FolderCubit>(context)
+                        .updateNote('General', widget.note);
+                  }
+
+                  if (contentController.text.length == 0 &&
+                      titleController.text.length == 0 &&
+                      widget.note != null) {
+                    BlocProvider.of<FolderCubit>(context).removeNoteFromFolder(
+                        widget.note.associatedFolder, widget.note);
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: Transform.translate(

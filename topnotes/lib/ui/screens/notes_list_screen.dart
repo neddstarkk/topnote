@@ -148,7 +148,7 @@ class _NotesListScreenState extends State<NotesListScreen> {
                                                     3),
                                         child: Container(
                                           child: Text(
-                                            "${displayContent(widget.notesToBeDisplayed[index].content)}", 
+                                            "${displayContent(widget.notesToBeDisplayed[index].content)}",
                                             overflow: TextOverflow.ellipsis,
                                             maxLines: 1,
                                             style: TextStyle(
