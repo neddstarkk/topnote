@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:topnotes/cubits/folders/folder_cubit.dart';
+import 'package:topnotes/data/models/folder_model.dart';
 import 'package:topnotes/data/models/notes_model.dart';
+import 'package:topnotes/data/repository/folder_repository.dart';
 import 'package:topnotes/internal/constants.dart';
 import 'package:topnotes/internal/size_config.dart';
 import 'package:topnotes/ui/widgets/note_page_widgets/associated_tags_widget.dart';
@@ -69,13 +71,15 @@ class _NotePageState extends State<NotePage> {
                   border: InputBorder.none,
                 ),
                 onChanged: (text) {
+                  Folder allNotes = repo.folders[0];
+
                   // if this is a new note and a change has just been made.
                   if (titleController.text.length == 1 && widget.note == null) {
                     var time = DateTime.now();
                     var newNote = Note(
                       noteId: time.toString(),
                       title: text,
-                      associatedFolder: 'All Notes',
+                      associatedFolders: [allNotes],
                       associatedTags: [],
                       isFavorite: false,
                       content: '',
@@ -83,21 +87,33 @@ class _NotePageState extends State<NotePage> {
                     );
 
                     widget.note = newNote;
-                    BlocProvider.of<FolderCubit>(context)
-                        .addNoteToFolder(widget.note.associatedFolder, newNote);
+                    BlocProvider.of<FolderCubit>(context).addNoteToFolder(
+                        widget.note.associatedFolders[0].folderName, newNote);
                   }
                   // a note object exists
                   else {
                     widget.note.title = text;
-                    BlocProvider.of<FolderCubit>(context)
-                        .updateNote(widget.note.associatedFolder, widget.note);
+
+                    for (var i = 0;
+                        i < widget.note.associatedFolders.length;
+                        i++) {
+                      BlocProvider.of<FolderCubit>(context).updateNote(
+                          widget.note.associatedFolders[i].folderName,
+                          widget.note);
+                    }
                   }
 
                   if (contentController.text.length == 0 &&
                       titleController.text.length == 0 &&
                       widget.note != null) {
-                    BlocProvider.of<FolderCubit>(context).removeNoteFromFolder(
-                        widget.note.associatedFolder, widget.note);
+                    for (var i = 0;
+                        i < widget.note.associatedFolders.length;
+                        i++) {
+                      BlocProvider.of<FolderCubit>(context)
+                          .removeNoteFromFolder(
+                              widget.note.associatedFolders[i].folderName,
+                              widget.note);
+                    }
                   }
                 },
               ),
@@ -133,13 +149,15 @@ class _NotePageState extends State<NotePage> {
                 ),
                 onChanged: (text) {
                   RegExp lineBreaks = RegExp("[\\n\\r]+");
-                  if (contentController.text.length > 0 && widget.note == null && !lineBreaks.hasMatch(text)) {
-
+                  if (contentController.text.length > 0 &&
+                      widget.note == null &&
+                      !lineBreaks.hasMatch(text)) {
+                    var allNotes = repo.folders[0];
                     var time = DateTime.now();
                     var newNote = Note(
                       noteId: time.toString(),
                       title: '',
-                      associatedFolder: 'All Notes',
+                      associatedFolders: [allNotes],
                       associatedTags: [],
                       isFavorite: false,
                       content: text,
@@ -147,21 +165,26 @@ class _NotePageState extends State<NotePage> {
                     );
 
                     widget.note = newNote;
-                    BlocProvider.of<FolderCubit>(context)
-                        .addNoteToFolder(widget.note.associatedFolder, newNote);
-                  } else if (widget.note != null){
-
-
+                    BlocProvider.of<FolderCubit>(context).addNoteToFolder(
+                        widget.note.associatedFolders[0].folderName, newNote);
+                  } else if (widget.note != null) {
                     widget.note.content = text;
-                    BlocProvider.of<FolderCubit>(context)
-                        .updateNote(widget.note.associatedFolder, widget.note);
+                    for (var i = 0;
+                        i < widget.note.associatedFolders.length;
+                        i++) {
+                      BlocProvider.of<FolderCubit>(context).updateNote(
+                          widget.note.associatedFolders[i].folderName,
+                          widget.note);
+                    }
                   }
 
                   if (contentController.text.length == 0 &&
                       titleController.text.length == 0 &&
                       widget.note != null) {
-                    BlocProvider.of<FolderCubit>(context).removeNoteFromFolder(
-                        widget.note.associatedFolder, widget.note);
+                    for(var i = 0; i < widget.note.associatedFolders.length; i++) {
+                      BlocProvider.of<FolderCubit>(context).removeNoteFromFolder(
+                          widget.note.associatedFolders[i].folderName, widget.note);
+                    }
                   }
                 },
               ),

@@ -6,14 +6,14 @@ class Note {
   String title;
   String content;
 
-  String associatedFolder;
+  List<Folder> associatedFolders;
   List<Tag> associatedTags;
   DateTime timeStamp;
 
   bool isFavorite;
 
   Note({
-    this.associatedFolder,
+    this.associatedFolders,
     this.associatedTags,
     this.noteId,
     this.content,

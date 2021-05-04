@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:collection/collection.dart';
 import 'package:topnotes/data/models/folder_model.dart';
 import 'package:topnotes/data/models/notes_model.dart';
@@ -16,7 +15,7 @@ class FolderCubit extends Cubit<List<Folder>> {
       typeOfFolder: "Normal",
       notesUnderFolder: [],
     );
-    folderList.add(folder);
+    folderList.insert(folderList.length - 2, folder);
 
     emit(folderList);
   }
@@ -31,14 +30,15 @@ class FolderCubit extends Cubit<List<Folder>> {
   }
 
   void updateNote(String nameOfFolder, Note note) {
-    Folder targetFolder =
-        folderList.firstWhere((folder) => folder.folderName == nameOfFolder);
 
-    var targetNote = targetFolder.notesUnderFolder.firstWhere((element) => element.noteId == note.noteId);
+    var targetFolders = folderList.where((element) => note.associatedFolders.contains(element));
 
-    targetFolder.notesUnderFolder.remove(targetNote);
-    targetNote = note;
-    targetFolder.notesUnderFolder.add(targetNote);
+    for(var folder in targetFolders) {
+      var targetNote = folder.notesUnderFolder.firstWhere((element) => element.noteId == note.noteId);
+      folder.notesUnderFolder.remove(targetNote);
+      targetNote = note;
+      folder.notesUnderFolder.add(targetNote);
+    }
 
     emit(folderList);
   }
