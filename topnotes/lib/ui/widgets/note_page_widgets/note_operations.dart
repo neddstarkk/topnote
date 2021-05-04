@@ -4,11 +4,12 @@ import 'package:topnotes/cubits/tags/tag_cubit.dart';
 import 'package:topnotes/data/models/notes_model.dart';
 import 'package:topnotes/data/models/tags_model.dart';
 import 'package:topnotes/internal/size_config.dart';
+import 'package:topnotes/ui/widgets/note_page_widgets/alert_dialog_folders.dart';
 
 import 'alert_dialog_tags.dart';
 
 class NoteOperations extends StatefulWidget {
-  final Note note ;
+  final Note note;
 
   NoteOperations({
     this.note,
@@ -62,12 +63,20 @@ class _NoteOperationsState extends State<NoteOperations> {
                       color: Color(0xFF2F4E60),
                     ),
                     title: Text(
-                      "Move to folder",
+                      "Add to folder",
                       style: TextStyle(color: Colors.white70),
                     ),
+                    enabled: widget.note != null ? true : false,
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialogFolders(note: widget.note,),
+                      );
+                    },
                   ),
                   ListTile(
-                    enabled: tags.isNotEmpty && widget.note != null ? true : false,
+                    enabled:
+                        tags.isNotEmpty && widget.note != null ? true : false,
                     leading: Icon(
                       Icons.local_offer_outlined,
                       color: Color(0xFF2F4E60),

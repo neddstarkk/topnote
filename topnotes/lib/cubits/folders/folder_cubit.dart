@@ -12,7 +12,7 @@ class FolderCubit extends Cubit<List<Folder>> {
   void addNewFolder(String text) {
     Folder folder = Folder(
       folderName: "$text",
-      typeOfFolder: "Normal",
+      typeOfFolder: "UC", // User Created
       notesUnderFolder: [],
     );
     folderList.insert(folderList.length - 2, folder);
@@ -51,6 +51,14 @@ class FolderCubit extends Cubit<List<Folder>> {
 
     emit(folderList);
   }
+
+  bool checkNoteInFolder(String nameOfFolder, Note note) {
+    Folder targetFolder = folderList.firstWhere((folder) => folder.folderName == nameOfFolder);
+
+    return targetFolder.notesUnderFolder.contains(note);
+  }
+
+  get folders => folderList;
 
   @override
   bool operator ==(Object other) {
