@@ -68,6 +68,7 @@ class _NoteOperationsState extends State<NoteOperations> {
                     ),
                     enabled: widget.note != null ? true : false,
                     onTap: () {
+                      Navigator.pop(context);
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialogFolders(note: widget.note,),
@@ -86,6 +87,7 @@ class _NoteOperationsState extends State<NoteOperations> {
                       style: TextStyle(color: Colors.white70),
                     ),
                     onTap: () {
+                      Navigator.pop(context);
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialogTags(

@@ -3,11 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:topnotes/cubits/folders/folder_cubit.dart';
 import 'package:topnotes/data/models/folder_model.dart';
 import 'package:topnotes/data/models/notes_model.dart';
+import 'package:toast/toast.dart';
 
 class AlertDialogFolders extends StatefulWidget {
   final Note note;
 
   AlertDialogFolders({this.note});
+
   @override
   _AlertDialogFoldersState createState() => _AlertDialogFoldersState();
 }
@@ -50,11 +52,20 @@ class _AlertDialogFoldersState extends State<AlertDialogFolders> {
         TextButton(
           child: Text("ADD"),
           onPressed: () {
+            if (value != null &&
+                BlocProvider.of<FolderCubit>(context).checkNoteInFolder(
+                        '${fetchedFolders[value].folderName}', widget.note) ==
+                    false) {
+              BlocProvider.of<FolderCubit>(context).addNoteToFolder(
+                  '${fetchedFolders[value].folderName}', widget.note);
 
-            if(value != null && BlocProvider.of<FolderCubit>(context).checkNoteInFolder('${fetchedFolders[value].folderName}', widget.note) == false) {
-              BlocProvider.of<FolderCubit>(context).addNoteToFolder('${fetchedFolders[value].folderName}', widget.note);
+              Navigator.pop(context);
+            } else if (BlocProvider.of<FolderCubit>(context).checkNoteInFolder(
+                    '${fetchedFolders[value].folderName}', widget.note) ==
+                true) {
+
+              Toast.show("Already present in folder", context, duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM, backgroundColor: Colors.grey.shade800);
             }
-
           },
         )
       ],

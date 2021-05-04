@@ -9,10 +9,6 @@ class NotesInitial extends NotesState {
   const NotesInitial();
 }
 
-class NotesModified extends NotesState {
-  const NotesModified();
-}
-
 class NoteTagsModified extends NotesState {
   final List<Tag> associatedTags;
   NoteTagsModified(this.associatedTags);
