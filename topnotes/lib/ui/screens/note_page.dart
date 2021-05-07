@@ -74,7 +74,7 @@ class _NotePageState extends State<NotePage> {
                   Folder allNotes = repo.folders[0];
 
                   // if this is a new note and a change has just been made.
-                  if (titleController.text.length == 1 && widget.note == null) {
+                  if (titleController.text.length > 0 && widget.note == null) {
                     var time = DateTime.now();
                     var newNote = Note(
                       noteId: time.toString(),

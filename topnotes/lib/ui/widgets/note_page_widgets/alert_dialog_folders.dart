@@ -59,12 +59,23 @@ class _AlertDialogFoldersState extends State<AlertDialogFolders> {
               BlocProvider.of<FolderCubit>(context).addNoteToFolder(
                   '${fetchedFolders[value].folderName}', widget.note);
 
-              Navigator.pop(context);
+              Toast.show(
+                "Added to folder",
+                context,
+                duration: Toast.LENGTH_SHORT,
+                gravity: Toast.BOTTOM,
+                backgroundColor: Colors.grey.shade800,
+              );
+              Future.delayed(Duration(milliseconds: 1200), () {
+                Navigator.pop(context);
+              });
             } else if (BlocProvider.of<FolderCubit>(context).checkNoteInFolder(
                     '${fetchedFolders[value].folderName}', widget.note) ==
                 true) {
-
-              Toast.show("Already present in folder", context, duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM, backgroundColor: Colors.grey.shade800);
+              Toast.show("Already present in folder", context,
+                  duration: Toast.LENGTH_SHORT,
+                  gravity: Toast.BOTTOM,
+                  backgroundColor: Colors.grey.shade800);
             }
           },
         )
