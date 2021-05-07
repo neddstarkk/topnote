@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:topnotes/cubits/tags/tag_cubit.dart';
-import 'package:topnotes/data/models/tags_model.dart';
+import 'package:topnotes/data/models/notes_model.dart';
 
 class AlertDialogTags extends StatefulWidget {
-  final List<Tag> associatedTagsList;
+  final Note note;
 
-  AlertDialogTags({this.associatedTagsList});
+  AlertDialogTags({this.note});
 
   @override
   _AlertDialogTagsState createState() => _AlertDialogTagsState();
 }
 
 class _AlertDialogTagsState extends State<AlertDialogTags> {
+
   @override
   Widget build(BuildContext context) {
-    var state = context.bloc<TagCubit>().getTagList();
+    var listOfTags = context.bloc<TagCubit>().getTagList();
 
     return AlertDialog(
       title: Text("Select Tags"),
@@ -23,23 +24,24 @@ class _AlertDialogTagsState extends State<AlertDialogTags> {
         width: 100,
         child: ListView.builder(
             shrinkWrap: true,
-            itemCount: state.length,
+            itemCount: listOfTags.length,
             itemBuilder: (context, index) {
               return CheckboxListTile(
-                title: Text("${state[index].tagName}"),
-                value: state[index].isSelected,
+                title: Text("${listOfTags[index].tagName}"),
+                value: listOfTags[index].isSelected,
                 onChanged: (newVal) {
                   setState(() {
-                    state[index].isSelected = newVal;
+                    listOfTags[index].isSelected = newVal;
                   });
 
-                  if (state[index].isSelected == true &&
-                      widget.associatedTagsList.indexOf(state[index]) == -1) {
-                    widget.associatedTagsList.add(state[index]);
+                  if (listOfTags[index].isSelected == true &&
+                      widget.note.associatedTags.indexOf(listOfTags[index]) == -1) {
+                    widget.note.associatedTags.add(listOfTags[index]);
+                    BlocProvider.of<TagCubit>(context).addNoteUnderTag(listOfTags[index].tagName, widget.note);
 
-                  } else if (state[index].isSelected == false &&
-                      widget.associatedTagsList.indexOf(state[index]) != -1) {
-                    widget.associatedTagsList.remove(state[index]);
+                  } else if (listOfTags[index].isSelected == false &&
+                      widget.note.associatedTags.indexOf(listOfTags[index]) != -1) {
+                    widget.note.associatedTags.remove(listOfTags[index]);
                   }
                 },
               );

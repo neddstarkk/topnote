@@ -91,7 +91,7 @@ class _NoteOperationsState extends State<NoteOperations> {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialogTags(
-                          associatedTagsList: tags,
+                          note: widget.note,
                         ),
                       );
                     },
