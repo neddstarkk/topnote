@@ -42,6 +42,7 @@ class _AlertDialogTagsState extends State<AlertDialogTags> {
                   } else if (listOfTags[index].isSelected == false &&
                       widget.note.associatedTags.indexOf(listOfTags[index]) != -1) {
                     widget.note.associatedTags.remove(listOfTags[index]);
+                    BlocProvider.of<TagCubit>(context).removeNoteFromTag(listOfTags[index].tagName, widget.note);
                   }
                 },
               );

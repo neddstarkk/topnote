@@ -23,6 +23,15 @@ class TagCubit extends Cubit<List<Tag>> {
     emit(tagList);
   }
 
+  void removeNoteFromTag(String tagName, Note note) {
+    Tag targetTag =
+    tagList.firstWhere((tag) => tag.tagName == tagName);
+
+    targetTag.notesUnderTag.remove(note);
+
+    emit(tagList);
+  }
+
   List<Tag> getTagList() {
     return tagList;
   }
