@@ -119,13 +119,18 @@ class _HomeScreenState extends State<HomeScreen> {
           "New Note",
           style: TextStyle(color: Colors.white70),
         ),
-        onTap: () {
-          Navigator.push(
+        onTap: () async {
+          var result = await Navigator.push(
             context,
             CupertinoPageRoute(
               builder: (context) => NotePage(),
             ),
           );
+          if(result == true) {
+            setState(() {
+
+            });
+          }
         },
       ),
     ];
@@ -144,9 +149,14 @@ class _HomeScreenState extends State<HomeScreen> {
           borderRadius:
               BorderRadius.circular(SizeConfig.blockSizeVertical * 10),
         ),
-        onTap: () {
-          Navigator.push(
+        onTap: () async {
+          var result = await Navigator.push(
               context, CupertinoPageRoute(builder: (context) => NotePage()));
+          if(result == true) {
+            setState(() {
+
+            });
+          }
         },
         child: Icon(
           Icons.add,

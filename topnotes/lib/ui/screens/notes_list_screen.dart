@@ -93,14 +93,20 @@ class _NotesListScreenState extends State<NotesListScreen> {
                           childAspectRatio: 3.0,
                         ),
                         itemBuilder: (context, index) => GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                  builder: (context) => NotePage(
-                                    note: widget.notesToBeDisplayed[index],
-                                  ),
-                                ));
+                          onTap: () async {
+                            var result = await Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => NotePage(
+                                  note: widget.notesToBeDisplayed[index],
+                                ),
+                              ),
+                            );
+                            if (result == true) {
+                              setState(() {
+                                
+                              });
+                            }
                           },
                           child: Container(
                             decoration: BoxDecoration(

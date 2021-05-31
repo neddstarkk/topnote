@@ -40,6 +40,7 @@ class _NotePageState extends State<NotePage> {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         elevation: 0,
+        leading: BackButton(onPressed: () => Navigator.pop(context, true),),
         actions: [
           Padding(
             padding: EdgeInsets.only(right: SizeConfig.blockSizeHorizontal * 3),
