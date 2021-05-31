@@ -104,7 +104,7 @@ class _NotesListScreenState extends State<NotesListScreen> {
                             );
                             if (result == true) {
                               setState(() {
-                                
+
                               });
                             }
                           },
