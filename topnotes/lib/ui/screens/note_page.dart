@@ -38,7 +38,7 @@ class _NotePageState extends State<NotePage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        if(1 == 1) {
+        if (1 == 1) {
           Navigator.pop(context, true);
         }
 
@@ -48,12 +48,30 @@ class _NotePageState extends State<NotePage> {
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
           elevation: 0,
-          leading: BackButton(onPressed: () => Navigator.pop(context, true),),
+          leading: BackButton(
+            onPressed: () => Navigator.pop(context, true),
+          ),
           actions: [
             Padding(
-              padding: EdgeInsets.only(right: SizeConfig.blockSizeHorizontal * 3),
-              child: Icon(
-                Icons.star_border_outlined,
+              padding:
+                  EdgeInsets.only(right: SizeConfig.blockSizeHorizontal * 3),
+              child: IconButton(
+                icon: widget.note == null
+                    ? Icon(Icons.star_border_outlined)
+                    : widget.note.isFavorite == true
+                        ? Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          )
+                        : Icon(Icons.star_border_outlined),
+                onPressed: () {
+                  if (widget.note != null) {
+                    setState(() {
+                      widget.note.isFavorite = !widget.note.isFavorite;
+                    });
+                    BlocProvider.of<FolderCubit>(context).favoriteNote(widget.note);
+                  }
+                },
               ),
             ),
           ],
@@ -83,7 +101,8 @@ class _NotePageState extends State<NotePage> {
                     Folder allNotes = repo.folders[0];
 
                     // if this is a new note and a change has just been made.
-                    if (titleController.text.length > 0 && widget.note == null) {
+                    if (titleController.text.length > 0 &&
+                        widget.note == null) {
                       var time = DateTime.now();
                       var newNote = Note(
                         noteId: time.toString(),
@@ -102,14 +121,8 @@ class _NotePageState extends State<NotePage> {
                     // a note object exists
                     else {
                       widget.note.title = text;
-
-                      for (var i = 0;
-                          i < widget.note.associatedFolders.length;
-                          i++) {
-                        BlocProvider.of<FolderCubit>(context).updateNote(
-                            widget.note.associatedFolders[i].folderName,
-                            widget.note);
-                      }
+                      BlocProvider.of<FolderCubit>(context)
+                          .updateNote(widget.note);
                     }
 
                     if (contentController.text.length == 0 &&
@@ -178,21 +191,21 @@ class _NotePageState extends State<NotePage> {
                           widget.note.associatedFolders[0].folderName, newNote);
                     } else if (widget.note != null) {
                       widget.note.content = text;
-                      for (var i = 0;
-                          i < widget.note.associatedFolders.length;
-                          i++) {
-                        BlocProvider.of<FolderCubit>(context).updateNote(
-                            widget.note.associatedFolders[i].folderName,
-                            widget.note);
-                      }
+
+                      BlocProvider.of<FolderCubit>(context)
+                          .updateNote(widget.note);
                     }
 
                     if (contentController.text.length == 0 &&
                         titleController.text.length == 0 &&
                         widget.note != null) {
-                      for(var i = 0; i < widget.note.associatedFolders.length; i++) {
-                        BlocProvider.of<FolderCubit>(context).removeNoteFromFolder(
-                            widget.note.associatedFolders[i].folderName, widget.note);
+                      for (var i = 0;
+                          i < widget.note.associatedFolders.length;
+                          i++) {
+                        BlocProvider.of<FolderCubit>(context)
+                            .removeNoteFromFolder(
+                                widget.note.associatedFolders[i].folderName,
+                                widget.note);
                       }
                     }
                   },

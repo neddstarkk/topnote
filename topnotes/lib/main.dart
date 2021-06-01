@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:topnotes/cubits/folders/folder_cubit.dart';
-import 'package:topnotes/cubits/notes/notes_cubit.dart';
-import 'package:topnotes/internal/size_config.dart';
 import 'package:topnotes/ui/screens/home_screen.dart';
 
 import 'cubits/tags/tag_cubit.dart';
@@ -16,10 +14,7 @@ class SpecialClass extends StatelessWidget {
       create: (context) => FolderCubit(),
       child: BlocProvider<TagCubit>(
         create: (context) => TagCubit(),
-        child: BlocProvider<NotesCubit>(
-          create: (context) => NotesCubit(),
-          child: TopNotesApp(),
-        ),
+        child: TopNotesApp(),
       ),
     );
   }

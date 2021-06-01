@@ -23,7 +23,6 @@ Widget buildFoldersList(List<Folder> listNew) {
         trailing: Text("${newList[index].notesUnderFolder.length}",
             style: tileTrailTextStyle),
         onTap: () {
-          // TODO: Implement folder view
           Navigator.push(
             context,
             CupertinoPageRoute(

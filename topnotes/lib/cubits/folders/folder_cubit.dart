@@ -29,7 +29,7 @@ class FolderCubit extends Cubit<List<Folder>> {
     emit(folderList);
   }
 
-  void updateNote(String nameOfFolder, Note note) {
+  void updateNote(Note note) {
 
     var targetFolders = folderList.where((element) => note.associatedFolders.contains(element));
 
@@ -41,6 +41,18 @@ class FolderCubit extends Cubit<List<Folder>> {
     }
 
     emit(folderList);
+  }
+
+  void favoriteNote(Note note) {
+    updateNote(note);
+    Folder favFolder = folderList.firstWhere((element) => element.folderName == "Favorites");
+    var contain = favFolder.notesUnderFolder.where((element) => element.noteId == note.noteId);
+    if(favFolder.notesUnderFolder.isEmpty || contain.isEmpty) {
+      addNoteToFolder('Favorites', note);
+    }
+    else if (contain.isNotEmpty) {
+      removeNoteFromFolder('Favorites', note);
+    }
   }
 
   void removeNoteFromFolder(String nameOfFolder, Note note) {
