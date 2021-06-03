@@ -127,6 +127,17 @@ class _NotesListScreenState extends State<NotesListScreen> {
                                       ],
                                     ),
                                   ),
+                                  widget.screenTitle == 'Trash'
+                                      ? PopupMenuItem(
+                                          value: 1,
+                                          child: Row(
+                                            children: [
+                                              Icon(Icons.restore),
+                                              Text("Restore"),
+                                            ],
+                                          ),
+                                        )
+                                      : null,
                                 ],
                                 position: RelativeRect.fromRect(
                                   tapPosition & const Size(40, 40),
@@ -135,13 +146,23 @@ class _NotesListScreenState extends State<NotesListScreen> {
                               ).then((value) {
                                 if (value == null)
                                   return;
-                                else if (value != null) {
+                                else if (value == 0) {
                                   setState(() {
-                                    print("here");
                                     BlocProvider.of<FolderCubit>(context)
                                         .moveNoteToTrash(
                                             widget.notesToBeDisplayed[index]);
                                   });
+                                } else if (value == 1) {
+                                  setState(
+                                    () {
+                                      BlocProvider.of<FolderCubit>(context)
+                                          .addNoteToFolder('All Notes',
+                                              widget.notesToBeDisplayed[index]);
+                                      BlocProvider.of<FolderCubit>(context)
+                                          .removeNoteFromFolder('Trash',
+                                              widget.notesToBeDisplayed[index]);
+                                    },
+                                  );
                                 }
                               });
                             },
@@ -229,11 +250,11 @@ class _NotesListScreenState extends State<NotesListScreen> {
                                           padding: EdgeInsets.all(
                                               SizeConfig.blockSizeHorizontal),
                                           decoration: BoxDecoration(
-                                              color: Color(0xFF687581),
-                                              borderRadius: BorderRadius
-                                                  .circular(SizeConfig
-                                                          .blockSizeVertical *
-                                                      10)),
+                                            color: Color(0xFF687581),
+                                            borderRadius: BorderRadius.circular(
+                                              SizeConfig.blockSizeVertical * 10,
+                                            ),
+                                          ),
                                           child: Text(
                                             "#${tag.tagName}",
                                             style: TextStyle(
