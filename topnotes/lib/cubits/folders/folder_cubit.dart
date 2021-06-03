@@ -64,6 +64,17 @@ class FolderCubit extends Cubit<List<Folder>> {
     emit(folderList);
   }
 
+  void moveNoteToTrash(Note note) {
+    var targetFolders = folderList.where((element) => note.associatedFolders.contains(element));
+
+    for(var folder in targetFolders) {
+      var targetNote = folder.notesUnderFolder.firstWhere((element) => element.noteId == note.noteId);
+      folder.notesUnderFolder.remove(targetNote);
+    }
+
+    addNoteToFolder('Trash', note);
+  }
+
   bool checkNoteInFolder(String nameOfFolder, Note note) {
     Folder targetFolder = folderList.firstWhere((folder) => folder.folderName == nameOfFolder);
 

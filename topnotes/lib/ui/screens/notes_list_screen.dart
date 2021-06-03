@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:topnotes/cubits/folders/folder_cubit.dart';
 import 'package:topnotes/data/models/notes_model.dart';
 import 'package:topnotes/internal/constants.dart';
 import 'package:topnotes/internal/size_config.dart';
@@ -19,6 +21,7 @@ class NotesListScreen extends StatefulWidget {
 
 class _NotesListScreenState extends State<NotesListScreen> {
   bool gridCountTwo = false;
+  var tapPosition;
 
   @override
   void initState() {
@@ -51,6 +54,10 @@ class _NotesListScreenState extends State<NotesListScreen> {
     }
 
     return content;
+  }
+
+  void _storePosition(TapDownDetails details) {
+    tapPosition = details.globalPosition;
   }
 
   @override
@@ -94,13 +101,79 @@ class _NotesListScreenState extends State<NotesListScreen> {
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: widget.notesToBeDisplayed.length,
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 1,
                             mainAxisSpacing: SizeConfig.blockSizeVertical * 2,
-                            crossAxisSpacing: SizeConfig.blockSizeHorizontal * 2,
+                            crossAxisSpacing:
+                                SizeConfig.blockSizeHorizontal * 2,
                             childAspectRatio: 3.0,
                           ),
                           itemBuilder: (context, index) => GestureDetector(
+                            onTapDown: _storePosition,
+                            onLongPress: () {
+                              final RenderBox overlay = Overlay.of(context)
+                                  .context
+                                  .findRenderObject();
+                              showMenu(
+                                context: context,
+                                items: [
+                                  PopupMenuItem(
+                                    value: 0,
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.delete),
+                                        Text("Delete"),
+                                      ],
+                                    ),
+                                  ),
+                                  widget.screenTitle == 'Trash'
+                                      ? PopupMenuItem(
+                                          value: 1,
+                                          child: Row(
+                                            children: [
+                                              Icon(Icons.restore),
+                                              Text("Restore"),
+                                            ],
+                                          ),
+                                        )
+                                      : null,
+                                ],
+                                position: RelativeRect.fromRect(
+                                  tapPosition & const Size(40, 40),
+                                  Offset.zero & overlay.size,
+                                ),
+                              ).then((value) {
+                                if (value == null)
+                                  return;
+                                else if (value == 0) {
+                                  if (widget.screenTitle == "Trash") {
+                                    setState(() {
+                                      BlocProvider.of<FolderCubit>(context)
+                                          .removeNoteFromFolder('Trash',
+                                              widget.notesToBeDisplayed[index]);
+                                     });
+                                  } else {
+                                    setState(() {
+                                      BlocProvider.of<FolderCubit>(context)
+                                          .moveNoteToTrash(
+                                              widget.notesToBeDisplayed[index]);
+                                    });
+                                  }
+                                } else if (value == 1) {
+                                  setState(
+                                    () {
+                                      BlocProvider.of<FolderCubit>(context)
+                                          .addNoteToFolder('All Notes',
+                                              widget.notesToBeDisplayed[index]);
+                                      BlocProvider.of<FolderCubit>(context)
+                                          .removeNoteFromFolder('Trash',
+                                              widget.notesToBeDisplayed[index]);
+                                    },
+                                  );
+                                }
+                              });
+                            },
                             onTap: () async {
                               var result = await Navigator.push(
                                 context,
@@ -111,9 +184,7 @@ class _NotesListScreenState extends State<NotesListScreen> {
                                 ),
                               );
                               if (result == true) {
-                                setState(() {
-
-                                });
+                                setState(() {});
                               }
                             },
                             child: Container(
@@ -137,9 +208,10 @@ class _NotesListScreenState extends State<NotesListScreen> {
                                         "${widget.notesToBeDisplayed[index].title}",
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize:
-                                                SizeConfig.blockSizeVertical * 2),
+                                          color: Colors.white,
+                                          fontSize:
+                                              SizeConfig.blockSizeVertical * 2,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -157,9 +229,9 @@ class _NotesListScreenState extends State<NotesListScreen> {
                                       Expanded(
                                         child: Padding(
                                           padding: EdgeInsets.only(
-                                              left:
-                                                  SizeConfig.blockSizeHorizontal *
-                                                      3),
+                                              left: SizeConfig
+                                                      .blockSizeHorizontal *
+                                                  3),
                                           child: Container(
                                             child: Text(
                                               "${displayContent(widget.notesToBeDisplayed[index].content)}",
@@ -186,14 +258,15 @@ class _NotesListScreenState extends State<NotesListScreen> {
                                           padding: EdgeInsets.all(
                                               SizeConfig.blockSizeHorizontal),
                                           decoration: BoxDecoration(
-                                              color: Color(0xFF687581),
-                                              borderRadius: BorderRadius.circular(
-                                                  SizeConfig.blockSizeVertical *
-                                                      10)),
+                                            color: Color(0xFF687581),
+                                            borderRadius: BorderRadius.circular(
+                                              SizeConfig.blockSizeVertical * 10,
+                                            ),
+                                          ),
                                           child: Text(
                                             "#${tag.tagName}",
-                                            style:
-                                                TextStyle(color: Colors.white70),
+                                            style: TextStyle(
+                                                color: Colors.white70),
                                           ),
                                         ),
                                       Spacer(),
