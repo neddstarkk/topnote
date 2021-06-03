@@ -6,16 +6,17 @@ import 'package:topnotes/cubits/folders/folder_cubit.dart';
 import 'package:topnotes/cubits/tags/tag_cubit.dart';
 import 'package:topnotes/data/models/folder_model.dart';
 import 'package:topnotes/data/models/tags_model.dart';
+import 'package:topnotes/internal/constants.dart';
 import 'package:topnotes/internal/global_key_registry.dart';
 import 'package:topnotes/internal/show_fab_menu.dart';
 import 'package:topnotes/internal/size_config.dart';
 import 'package:topnotes/ui/screens/note_page.dart';
-import 'package:topnotes/ui/widgets/home_screen_widgets/build_folders_list_widget.dart';
-import 'package:topnotes/ui/widgets/home_screen_widgets/build_tags_list_widget.dart';
 import 'package:topnotes/ui/widgets/home_screen_widgets/fake_fab.dart';
 import 'package:topnotes/ui/widgets/home_screen_widgets/folder_text.dart';
 import 'package:topnotes/ui/widgets/home_screen_widgets/tags_text.dart';
 import 'package:topnotes/ui/widgets/home_screen_widgets/topnotes_text.dart';
+
+import 'notes_list_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -190,7 +191,41 @@ class _HomeScreenState extends State<HomeScreen> {
             // Folders Listview
             BlocBuilder<FolderCubit, List<Folder>>(
               builder: (context, state) {
-                return buildFoldersList(state);
+                return ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: state.length ,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(
+                        "${state[index].folderName}",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      leading: state[index].icon != null ? state[index].icon : Icon(
+                        Icons.folder_outlined,
+                        color: tileIconColor,
+                      ),
+                      trailing: Text("${state[index].notesUnderFolder.length}",
+                          style: tileTrailTextStyle),
+                      onTap: () async {
+                        var result = await Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => NotesListScreen(
+                              screenTitle: state[index].folderName,
+                              notesToBeDisplayed: state[index].notesUnderFolder,
+                            ),
+                          ),
+                        );
+                        if(result == true) {
+                          setState(() {
+                            
+                          });
+                        }
+                      },
+                    );
+                  },
+                );
               },
             ),
 
@@ -203,7 +238,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    for (var tag in state) buildTagsList(tag),
+                    for (var tag in state) ListTile(
+                      leading: Icon(
+                        Icons.local_offer_outlined,
+                        color: tileIconColor,
+                      ),
+                      title: Text(
+                        "${tag.tagName}",
+                        style: TextStyle(color: Color(0xFF667079)),
+                      ),
+                      trailing: Text(
+                        "${tag.notesUnderTag.length}",
+                        style: tileTrailTextStyle,
+                      ),
+                    ),
                   ],
                 );
               },
