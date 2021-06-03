@@ -147,11 +147,19 @@ class _NotesListScreenState extends State<NotesListScreen> {
                                 if (value == null)
                                   return;
                                 else if (value == 0) {
-                                  setState(() {
-                                    BlocProvider.of<FolderCubit>(context)
-                                        .moveNoteToTrash(
-                                            widget.notesToBeDisplayed[index]);
-                                  });
+                                  if (widget.screenTitle == "Trash") {
+                                    setState(() {
+                                      BlocProvider.of<FolderCubit>(context)
+                                          .removeNoteFromFolder('Trash',
+                                              widget.notesToBeDisplayed[index]);
+                                     });
+                                  } else {
+                                    setState(() {
+                                      BlocProvider.of<FolderCubit>(context)
+                                          .moveNoteToTrash(
+                                              widget.notesToBeDisplayed[index]);
+                                    });
+                                  }
                                 } else if (value == 1) {
                                   setState(
                                     () {
