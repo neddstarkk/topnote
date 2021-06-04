@@ -25,7 +25,7 @@ class NoteTakingMechanisms extends StatelessWidget {
               onPressed: () {},
               child: Icon(
                 Icons.check_box_outlined,
-                color: Colors.white70,
+
               ),
               style: ButtonStyle(
                 padding:
@@ -44,7 +44,7 @@ class NoteTakingMechanisms extends StatelessWidget {
               onPressed: () {},
               child: Icon(
                 Icons.image_outlined,
-                color: Colors.white70,
+
               ),
               style: ButtonStyle(
                 padding:

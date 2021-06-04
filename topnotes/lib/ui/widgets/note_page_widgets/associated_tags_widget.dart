@@ -10,14 +10,12 @@ Widget showAssociatedTags(Tag tag) {
       padding:
           EdgeInsets.symmetric(horizontal: SizeConfig.blockSizeHorizontal * 2),
       decoration: BoxDecoration(
-        color: Color(0xFF253848),
         borderRadius: BorderRadius.circular(SizeConfig.blockSizeVertical * 2)
       ),
       child: Center(
         child: Text(
           "#${tag.tagName}",
           style: TextStyle(
-            color: Colors.white38,
           ),
         ),
       ),

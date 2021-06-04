@@ -85,7 +85,7 @@ class _NotesListScreenState extends State<NotesListScreen> {
                       bottom: SizeConfig.safeBlockVertical * 2),
                   child: Text(
                     "${widget.screenTitle}",
-                    style: headerTextStyle.copyWith(
+                    style: TextStyle(
                       fontSize: SizeConfig.blockSizeVertical * 4,
                     ),
                   ),
@@ -152,7 +152,7 @@ class _NotesListScreenState extends State<NotesListScreen> {
                                       BlocProvider.of<FolderCubit>(context)
                                           .removeNoteFromFolder('Trash',
                                               widget.notesToBeDisplayed[index]);
-                                     });
+                                    });
                                   } else {
                                     setState(() {
                                       BlocProvider.of<FolderCubit>(context)
@@ -189,7 +189,6 @@ class _NotesListScreenState extends State<NotesListScreen> {
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                color: Colors.white10,
                                 borderRadius: BorderRadius.circular(
                                     SizeConfig.blockSizeHorizontal),
                               ),
@@ -208,7 +207,6 @@ class _NotesListScreenState extends State<NotesListScreen> {
                                         "${widget.notesToBeDisplayed[index].title}",
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                          color: Colors.white,
                                           fontSize:
                                               SizeConfig.blockSizeVertical * 2,
                                         ),
@@ -224,7 +222,6 @@ class _NotesListScreenState extends State<NotesListScreen> {
                                               .timeStamp,
                                         )}",
                                         overflow: TextOverflow.fade,
-                                        style: TextStyle(color: Colors.white38),
                                       ),
                                       Expanded(
                                         child: Padding(
@@ -237,8 +234,6 @@ class _NotesListScreenState extends State<NotesListScreen> {
                                               "${displayContent(widget.notesToBeDisplayed[index].content)}",
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 1,
-                                              style: TextStyle(
-                                                  color: Colors.white60),
                                             ),
                                           ),
                                         ),
@@ -258,15 +253,14 @@ class _NotesListScreenState extends State<NotesListScreen> {
                                           padding: EdgeInsets.all(
                                               SizeConfig.blockSizeHorizontal),
                                           decoration: BoxDecoration(
-                                            color: Color(0xFF687581),
+
                                             borderRadius: BorderRadius.circular(
                                               SizeConfig.blockSizeVertical * 10,
                                             ),
                                           ),
                                           child: Text(
                                             "#${tag.tagName}",
-                                            style: TextStyle(
-                                                color: Colors.white70),
+
                                           ),
                                         ),
                                       Spacer(),
@@ -276,7 +270,7 @@ class _NotesListScreenState extends State<NotesListScreen> {
                                                     .isFavorite ==
                                                 true
                                             ? Colors.amber
-                                            : Colors.white10,
+                                            : ThemeData().primaryColor,
                                       )
                                     ],
                                   )

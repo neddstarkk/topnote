@@ -53,25 +53,24 @@ class _NoteOperationsState extends State<NoteOperations> {
             builder: (context) => Container(
               height: SizeConfig.blockSizeVertical * 12,
               width: SizeConfig.screenWidth,
-              color: Color(0xFF1A2B37),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ListTile(
                     leading: Icon(
                       Icons.folder_open_outlined,
-                      color: Color(0xFF2F4E60),
                     ),
                     title: Text(
                       "Add to folder",
-                      style: TextStyle(color: Colors.white70),
                     ),
                     enabled: widget.note != null ? true : false,
                     onTap: () {
                       Navigator.pop(context);
                       showDialog(
                         context: context,
-                        builder: (context) => AlertDialogFolders(note: widget.note,),
+                        builder: (context) => AlertDialogFolders(
+                          note: widget.note,
+                        ),
                       );
                     },
                   ),
@@ -80,11 +79,9 @@ class _NoteOperationsState extends State<NoteOperations> {
                         tags.isNotEmpty && widget.note != null ? true : false,
                     leading: Icon(
                       Icons.local_offer_outlined,
-                      color: Color(0xFF2F4E60),
                     ),
                     title: Text(
                       "Add tags",
-                      style: TextStyle(color: Colors.white70),
                     ),
                     onTap: () {
                       Navigator.pop(context);
@@ -103,7 +100,6 @@ class _NoteOperationsState extends State<NoteOperations> {
         },
         child: Icon(
           Icons.more_vert,
-          color: Colors.white70,
         ),
       ),
     );

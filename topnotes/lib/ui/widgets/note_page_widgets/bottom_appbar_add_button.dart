@@ -23,47 +23,42 @@ class BottomAppBarAddButton extends StatelessWidget {
         ),
         onPressed: () {
           showModalBottomSheet(
-              context: context,
-              builder: (context) => Container(
-                    height: SizeConfig.blockSizeVertical * 12,
-                    width: SizeConfig.screenWidth,
-                    color: Color(0xFF1A2B37),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ListTile(
-                          leading: Icon(
-                            Icons.folder_open_outlined,
-                            color: Color(0xFF2F4E60),
-                          ),
-                          title: Text(
-                            "Add to folder",
-                            style: TextStyle(color: Colors.white70),
-                          ),
-                        ),
-                        ListTile(
-                          leading: Icon(
-                            Icons.local_offer_outlined,
-                            color: Color(0xFF2F4E60),
-                          ),
-                          title: Text(
-                            "Add tags",
-                            style: TextStyle(color: Colors.white70),
-                          ),
-                          onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => addTagsToNote(),
-                            );
-                          },
-                        ),
-                      ],
+            context: context,
+            builder: (context) => Container(
+              height: SizeConfig.blockSizeVertical * 12,
+              width: SizeConfig.screenWidth,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListTile(
+                    leading: Icon(
+                      Icons.folder_open_outlined,
                     ),
-                  ));
+                    title: Text(
+                      "Add to folder",
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(
+                      Icons.local_offer_outlined,
+                    ),
+                    title: Text(
+                      "Add tags",
+                    ),
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => addTagsToNote(),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
         },
         child: Icon(
           Icons.more_vert,
-          color: Colors.white70,
         ),
       ),
     );

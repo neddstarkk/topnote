@@ -73,7 +73,6 @@ class _FakeFabState extends State<FakeFab> with SingleTickerProviderStateMixin {
     return SlideTransition(
       position: pos,
       child: Material(
-        color: Color(0xFF1C303F),
         elevation: widget.elevation,
         clipBehavior: Clip.antiAlias,
         shape: widget.shape,

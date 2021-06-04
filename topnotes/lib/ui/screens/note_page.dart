@@ -5,7 +5,6 @@ import 'package:topnotes/cubits/folders/folder_cubit.dart';
 import 'package:topnotes/data/models/folder_model.dart';
 import 'package:topnotes/data/models/notes_model.dart';
 import 'package:topnotes/data/repository/folder_repository.dart';
-import 'package:topnotes/internal/constants.dart';
 import 'package:topnotes/internal/size_config.dart';
 import 'package:topnotes/ui/widgets/note_page_widgets/associated_tags_widget.dart';
 import 'package:topnotes/ui/widgets/note_page_widgets/note_operations.dart';
@@ -87,13 +86,13 @@ class _NotePageState extends State<NotePage> {
                   cursorColor: Colors.white,
                   controller: titleController,
                   textCapitalization: TextCapitalization.sentences,
-                  style: noteTitleTextStyle.copyWith(
+                  style: TextStyle(
                     fontSize: SizeConfig.blockSizeVertical * 2,
                     fontWeight: FontWeight.bold,
                   ),
                   decoration: InputDecoration(
                     hintText: "Title",
-                    hintStyle: noteTitleTextStyle.copyWith(
+                    hintStyle: TextStyle(
                         fontSize: SizeConfig.blockSizeVertical * 2),
                     border: InputBorder.none,
                   ),
@@ -159,13 +158,13 @@ class _NotePageState extends State<NotePage> {
                   cursorColor: Colors.white,
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
-                  style: noteTitleTextStyle.copyWith(
+                  style: TextStyle(
                     fontSize: SizeConfig.blockSizeVertical * 2,
                   ),
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: "Content",
-                    hintStyle: noteContentTextStyle.copyWith(
+                    hintStyle: TextStyle(
                       fontSize: SizeConfig.blockSizeVertical * 2,
                     ),
                   ),

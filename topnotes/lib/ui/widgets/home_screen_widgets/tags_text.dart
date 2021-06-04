@@ -14,7 +14,7 @@ class TagsText extends StatelessWidget {
       child: Text(
         "Tags",
         style:
-            tagTextStyle.copyWith(fontSize: SizeConfig.blockSizeVertical * 2),
+        TextStyle(fontSize: SizeConfig.blockSizeVertical * 2),
       ),
     );
   }
