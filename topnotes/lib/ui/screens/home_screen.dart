@@ -150,6 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         child: Icon(
           Icons.add,
+          color: ThemeData().primaryColorLight,
         ),
       ),
     );

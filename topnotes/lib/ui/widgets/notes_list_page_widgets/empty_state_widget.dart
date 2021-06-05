@@ -6,7 +6,6 @@ class EmptyStateWidget extends StatelessWidget {
     return Center(
       child: Text(
         "Empty State",
-        style: TextStyle(color: Colors.white),
       ),
     );
   }

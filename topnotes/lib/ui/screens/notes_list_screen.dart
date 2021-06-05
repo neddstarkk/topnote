@@ -189,6 +189,7 @@ class _NotesListScreenState extends State<NotesListScreen> {
                             },
                             child: Container(
                               decoration: BoxDecoration(
+                                color: Color(0xFFBEBEDF),
                                 borderRadius: BorderRadius.circular(
                                     SizeConfig.blockSizeHorizontal),
                               ),
