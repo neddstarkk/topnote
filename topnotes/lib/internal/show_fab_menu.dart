@@ -20,7 +20,6 @@ class Utils {
           child: Hero(
             tag: "fabMenu",
             child: Material(
-              color: Color(0xFF1C303F),
               elevation: 2,
               clipBehavior: Clip.antiAlias,
               shape: RoundedRectangleBorder(

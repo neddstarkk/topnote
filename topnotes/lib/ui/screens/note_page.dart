@@ -49,6 +49,7 @@ class _NotePageState extends State<NotePage> {
         appBar: AppBar(
           elevation: 0,
           leading: BackButton(
+            color: iconColor,
             onPressed: () => Navigator.pop(context, true),
           ),
           actions: [
@@ -57,7 +58,7 @@ class _NotePageState extends State<NotePage> {
                   EdgeInsets.only(right: SizeConfig.blockSizeHorizontal * 3),
               child: IconButton(
                 icon: widget.note == null
-                    ? Icon(Icons.star_border_outlined)
+                    ? Icon(Icons.star_border_outlined, color: iconColor,)
                     : widget.note.isFavorite == true
                         ? Icon(
                             Icons.star,
@@ -87,13 +88,13 @@ class _NotePageState extends State<NotePage> {
                   cursorColor: Colors.white,
                   controller: titleController,
                   textCapitalization: TextCapitalization.sentences,
-                  style: noteTitleTextStyle.copyWith(
+                  style: TextStyle(
                     fontSize: SizeConfig.blockSizeVertical * 2,
                     fontWeight: FontWeight.bold,
                   ),
                   decoration: InputDecoration(
                     hintText: "Title",
-                    hintStyle: noteTitleTextStyle.copyWith(
+                    hintStyle: TextStyle(
                         fontSize: SizeConfig.blockSizeVertical * 2),
                     border: InputBorder.none,
                   ),
@@ -159,13 +160,13 @@ class _NotePageState extends State<NotePage> {
                   cursorColor: Colors.white,
                   keyboardType: TextInputType.multiline,
                   maxLines: null,
-                  style: noteTitleTextStyle.copyWith(
+                  style: TextStyle(
                     fontSize: SizeConfig.blockSizeVertical * 2,
                   ),
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: "Content",
-                    hintStyle: noteContentTextStyle.copyWith(
+                    hintStyle: TextStyle(
                       fontSize: SizeConfig.blockSizeVertical * 2,
                     ),
                   ),
@@ -217,8 +218,8 @@ class _NotePageState extends State<NotePage> {
         bottomNavigationBar: Transform.translate(
           offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
           child: BottomAppBar(
-            color: Color(0xFF1A2B37),
             child: Container(
+              color: AppColors.backgroundColor.withAlpha(210),
               height: SizeConfig.blockSizeVertical * 5,
               width: SizeConfig.screenWidth,
               child: Row(

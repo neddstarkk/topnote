@@ -14,7 +14,6 @@ class CustomAppBarRow extends StatelessWidget {
         children: [
           Icon(
             Icons.settings,
-            color: tileIconColor,
           ),
           Padding(
             padding: EdgeInsets.only(
@@ -23,7 +22,6 @@ class CustomAppBarRow extends StatelessWidget {
             ),
             child: Text(
               "Settings",
-              style: TextStyle(color: tileIconColor),
             ),
           )
         ],

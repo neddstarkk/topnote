@@ -90,22 +90,20 @@ class _HomeScreenState extends State<HomeScreen> {
       ListTile(
         leading: Icon(
           Icons.local_offer_outlined,
-          color: Color(0xFF2F4E60),
+          color: iconColor,
         ),
         title: Text(
           "New Tag",
-          style: TextStyle(color: Colors.white70),
         ),
         onTap: () => addTag(context),
       ),
       ListTile(
         leading: Icon(
           Icons.folder_open_outlined,
-          color: Color(0xFF2F4E60),
+          color: iconColor,
         ),
         title: Text(
           "New Folder",
-          style: TextStyle(color: Colors.white70),
         ),
         onTap: () {
           addFolder(context);
@@ -114,11 +112,10 @@ class _HomeScreenState extends State<HomeScreen> {
       ListTile(
         leading: Icon(
           Icons.add,
-          color: Color(0xFFDAC279),
+          color: iconColor,
         ),
         title: Text(
           "New Note",
-          style: TextStyle(color: Colors.white70),
         ),
         onTap: () async {
           var result = await Navigator.push(
@@ -127,10 +124,8 @@ class _HomeScreenState extends State<HomeScreen> {
               builder: (context) => NotePage(),
             ),
           );
-          if(result == true) {
-            setState(() {
-
-            });
+          if (result == true) {
+            setState(() {});
           }
         },
       ),
@@ -153,15 +148,12 @@ class _HomeScreenState extends State<HomeScreen> {
         onTap: () async {
           var result = await Navigator.push(
               context, CupertinoPageRoute(builder: (context) => NotePage()));
-          if(result == true) {
-            setState(() {
-
-            });
+          if (result == true) {
+            setState(() {});
           }
         },
         child: Icon(
           Icons.add,
-          color: Color(0xFFDAC279),
         ),
       ),
     );
@@ -194,19 +186,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 return ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: state.length ,
+                  itemCount: state.length,
                   itemBuilder: (context, index) {
                     return ListTile(
                       title: Text(
                         "${state[index].folderName}",
-                        style: TextStyle(color: Colors.white),
                       ),
-                      leading: state[index].icon != null ? state[index].icon : Icon(
-                        Icons.folder_outlined,
-                        color: tileIconColor,
+                      leading: state[index].icon != null
+                          ? state[index].icon
+                          : Icon(
+                              Icons.folder_outlined,
+                            ),
+                      trailing: Text(
+                        "${state[index].notesUnderFolder.length}",
                       ),
-                      trailing: Text("${state[index].notesUnderFolder.length}",
-                          style: tileTrailTextStyle),
                       onTap: () async {
                         var result = await Navigator.push(
                           context,
@@ -217,10 +210,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         );
-                        if(result == true) {
-                          setState(() {
-                            
-                          });
+                        if (result == true) {
+                          setState(() {});
                         }
                       },
                     );
@@ -238,20 +229,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    for (var tag in state) ListTile(
-                      leading: Icon(
-                        Icons.local_offer_outlined,
-                        color: tileIconColor,
+                    for (var tag in state)
+                      ListTile(
+                        leading: Icon(
+                          Icons.local_offer_outlined,
+                        ),
+                        title: Text(
+                          "${tag.tagName}",
+                        ),
+                        trailing: Text(
+                          "${tag.notesUnderTag.length}",
+                        ),
                       ),
-                      title: Text(
-                        "${tag.tagName}",
-                        style: TextStyle(color: Color(0xFF667079)),
-                      ),
-                      trailing: Text(
-                        "${tag.notesUnderTag.length}",
-                        style: tileTrailTextStyle,
-                      ),
-                    ),
                   ],
                 );
               },
