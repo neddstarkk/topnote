@@ -189,7 +189,7 @@ class _NotesListScreenState extends State<NotesListScreen> {
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                color: Color(0xFFBEBEDF),
+                                color: Color(0xFF262626),
                                 borderRadius: BorderRadius.circular(
                                     SizeConfig.blockSizeHorizontal),
                               ),
@@ -227,9 +227,10 @@ class _NotesListScreenState extends State<NotesListScreen> {
                                       Expanded(
                                         child: Padding(
                                           padding: EdgeInsets.only(
-                                              left: SizeConfig
-                                                      .blockSizeHorizontal *
-                                                  3),
+                                            left:
+                                                SizeConfig.blockSizeHorizontal *
+                                                    3,
+                                          ),
                                           child: Container(
                                             child: Text(
                                               "${displayContent(widget.notesToBeDisplayed[index].content)}",
@@ -254,14 +255,13 @@ class _NotesListScreenState extends State<NotesListScreen> {
                                           padding: EdgeInsets.all(
                                               SizeConfig.blockSizeHorizontal),
                                           decoration: BoxDecoration(
-
+                                            color: iconColor.withOpacity(0.2),
                                             borderRadius: BorderRadius.circular(
                                               SizeConfig.blockSizeVertical * 10,
                                             ),
                                           ),
                                           child: Text(
                                             "#${tag.tagName}",
-
                                           ),
                                         ),
                                       Spacer(),
@@ -271,7 +271,7 @@ class _NotesListScreenState extends State<NotesListScreen> {
                                                     .isFavorite ==
                                                 true
                                             ? Colors.amber
-                                            : ThemeData().primaryColor,
+                                            : iconColor,
                                       )
                                     ],
                                   )

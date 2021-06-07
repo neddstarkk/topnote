@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:topnotes/cubits/tags/tag_cubit.dart';
 import 'package:topnotes/data/models/notes_model.dart';
 import 'package:topnotes/data/models/tags_model.dart';
+import 'package:topnotes/internal/constants.dart';
 import 'package:topnotes/internal/size_config.dart';
 import 'package:topnotes/ui/widgets/note_page_widgets/alert_dialog_folders.dart';
 
@@ -59,9 +60,12 @@ class _NoteOperationsState extends State<NoteOperations> {
                   ListTile(
                     leading: Icon(
                       Icons.folder_open_outlined,
+                      color: iconColor,
                     ),
                     title: Text(
                       "Add to folder",
+                      style: TextStyle(
+                          color: AppColors.textColor.withOpacity(0.8)),
                     ),
                     enabled: widget.note != null ? true : false,
                     onTap: () {
@@ -79,9 +83,12 @@ class _NoteOperationsState extends State<NoteOperations> {
                         tags.isNotEmpty && widget.note != null ? true : false,
                     leading: Icon(
                       Icons.local_offer_outlined,
+                      color: iconColor,
                     ),
                     title: Text(
                       "Add tags",
+                      style: TextStyle(
+                          color: AppColors.textColor.withOpacity(0.8)),
                     ),
                     onTap: () {
                       Navigator.pop(context);
@@ -100,6 +107,7 @@ class _NoteOperationsState extends State<NoteOperations> {
         },
         child: Icon(
           Icons.more_vert,
+          color: iconColor,
         ),
       ),
     );

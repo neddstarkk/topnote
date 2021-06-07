@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class NoteTileDisplay {
   static String displayTime(DateTime timeStamp) {
     const Map<int, String> monthsInYear = {
@@ -25,4 +27,12 @@ class NoteTileDisplay {
 
     return content;
   }
+}
+
+Color iconColor = Color(0xFFFFFFFF).withOpacity(0.6);
+
+class AppColors {
+  static Color backgroundColor = Color(0xFF1C1C1C);
+  static Color textColor = Color(0xFFFFFFFF);
+  
 }

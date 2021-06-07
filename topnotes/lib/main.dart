@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:topnotes/cubits/folders/folder_cubit.dart';
+import 'package:topnotes/internal/constants.dart';
 import 'package:topnotes/ui/screens/home_screen.dart';
 
 import 'cubits/tags/tag_cubit.dart';
@@ -26,9 +27,8 @@ class TopNotesApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: Color(0xFF1F1F1F),
-        backgroundColor: Color(0xFF1F1F1F),
-        primaryColor: Color(0xFFBEBEDF),
+        scaffoldBackgroundColor: AppColors.backgroundColor,
+        backgroundColor: AppColors.backgroundColor,
         brightness: Brightness.dark,
       ),
       home: HomeScreen(),

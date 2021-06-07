@@ -6,6 +6,7 @@ import 'package:topnotes/cubits/folders/folder_cubit.dart';
 import 'package:topnotes/cubits/tags/tag_cubit.dart';
 import 'package:topnotes/data/models/folder_model.dart';
 import 'package:topnotes/data/models/tags_model.dart';
+import 'package:topnotes/internal/constants.dart';
 import 'package:topnotes/internal/global_key_registry.dart';
 import 'package:topnotes/internal/show_fab_menu.dart';
 import 'package:topnotes/internal/size_config.dart';
@@ -89,6 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ListTile(
         leading: Icon(
           Icons.local_offer_outlined,
+          color: iconColor,
         ),
         title: Text(
           "New Tag",
@@ -98,6 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ListTile(
         leading: Icon(
           Icons.folder_open_outlined,
+          color: iconColor,
         ),
         title: Text(
           "New Folder",
@@ -109,6 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ListTile(
         leading: Icon(
           Icons.add,
+          color: iconColor,
         ),
         title: Text(
           "New Note",
@@ -150,7 +154,6 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         child: Icon(
           Icons.add,
-          color: ThemeData().primaryColorLight,
         ),
       ),
     );

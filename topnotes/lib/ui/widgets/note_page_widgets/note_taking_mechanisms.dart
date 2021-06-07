@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:topnotes/internal/constants.dart';
 import 'package:topnotes/internal/size_config.dart';
 
 class NoteTakingMechanisms extends StatelessWidget {
@@ -25,7 +26,7 @@ class NoteTakingMechanisms extends StatelessWidget {
               onPressed: () {},
               child: Icon(
                 Icons.check_box_outlined,
-
+                color: iconColor,
               ),
               style: ButtonStyle(
                 padding:
@@ -44,7 +45,7 @@ class NoteTakingMechanisms extends StatelessWidget {
               onPressed: () {},
               child: Icon(
                 Icons.image_outlined,
-
+                color: iconColor,
               ),
               style: ButtonStyle(
                 padding:
