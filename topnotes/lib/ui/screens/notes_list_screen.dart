@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:topnotes/data/models/notes_model.dart';
-import 'package:topnotes/data/models/tags_model.dart';
 import 'package:topnotes/internal/constants.dart';
 import 'package:topnotes/internal/size_config.dart';
 import 'package:topnotes/ui/screens/note_page.dart';
@@ -33,14 +32,18 @@ class _NotesListScreenState extends State<NotesListScreen> {
         "${widget.screenTitle}",
         style: TextStyle(
           fontSize: SizeConfig.blockSizeVertical * 4,
+          color: Colors.white70
         ),
       ),
       automaticallyImplyLeading: false,
       elevation: 0,
-      backgroundColor: Color(0xFF0C1720),
+      backgroundColor: AppColors.backgroundColor,
     );
 
-    AppBar newAppBar = AppBar();
+    AppBar newAppBar = AppBar(
+      toolbarHeight: SizeConfig.blockSizeVertical * 10,
+      backgroundColor: AppColors.backgroundColor,
+    );
 
     if (triggerGlobalSelection == true) {
       return newAppBar;
@@ -88,123 +91,127 @@ class _NotesListScreenState extends State<NotesListScreen> {
                       crossAxisSpacing: SizeConfig.blockSizeHorizontal * 2,
                       childAspectRatio: 3.0,
                     ),
-                    itemBuilder: (context, index) => GestureDetector(
-                      onTapDown: _storePosition,
-                      onLongPress: () {
-                        if (triggerGlobalSelection == false) {
-                          setState(() {
-                            triggerGlobalSelection = true;
-                            selectedList.add(index);
-                          });
-                        }
-                      },
-                      onTap: () async {
-                        if (triggerGlobalSelection == false) {
-                          var result = await Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (context) => NotePage(
-                                note: widget.notesToBeDisplayed[index],
-                              ),
-                            ),
-                          );
-                          if (result == true) {
-                            setState(() {});
-                          }
-                        } else if (triggerGlobalSelection == true) {
-                          if (selectedList.contains(index)) {
+                    itemBuilder: (context, index) => Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTapDown: _storePosition,
+                        onLongPress: () {
+                          if (triggerGlobalSelection == false) {
                             setState(() {
-                              selectedList.remove(index);
-                            });
-
-                            if (selectedList.isEmpty) {
-                              setState(() {
-                                triggerGlobalSelection = false;
-                              });
-                            }
-                          } else {
-                            setState(() {
+                              triggerGlobalSelection = true;
                               selectedList.add(index);
                             });
                           }
-                        }
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: selectedList.contains(index) == true
-                              ? Colors.white70
-                              : Colors.white10,
-                          borderRadius: BorderRadius.circular(
-                            SizeConfig.blockSizeHorizontal,
+                        },
+                        onTap: () async {
+                          if (triggerGlobalSelection == false) {
+                            var result = await Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => NotePage(
+                                  note: widget.notesToBeDisplayed[index],
+                                ),
+                              ),
+                            );
+                            if (result == true) {
+                              setState(() {});
+                            }
+                          } else if (triggerGlobalSelection == true) {
+                            if (selectedList.contains(index)) {
+                              setState(() {
+                                selectedList.remove(index);
+                              });
+
+                              if (selectedList.isEmpty) {
+                                setState(() {
+                                  triggerGlobalSelection = false;
+                                });
+                              }
+                            } else {
+                              setState(() {
+                                selectedList.add(index);
+                              });
+                            }
+                          }
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white10,
+                            border: Border.all(color: selectedList.contains(index) == true ? Color(0xFFD8D8D8) : Colors.transparent),
+                            borderRadius: BorderRadius.circular(
+                              SizeConfig.blockSizeHorizontal,
+                            ),
                           ),
-                        ),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: SizeConfig.blockSizeHorizontal * 5,
-                          vertical: SizeConfig.blockSizeVertical * 2.5,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  bottom: SizeConfig.blockSizeHorizontal),
-                              child: Container(
-                                child: Text(
-                                  "${widget.notesToBeDisplayed[index].title}",
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: SizeConfig.blockSizeVertical * 2,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: SizeConfig.blockSizeHorizontal * 5,
+                            vertical: SizeConfig.blockSizeVertical * 2.5,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    bottom: SizeConfig.blockSizeHorizontal),
+                                child: Container(
+                                  child: Text(
+                                    "${widget.notesToBeDisplayed[index].title}",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white70,
+                                      fontSize:
+                                          SizeConfig.blockSizeVertical * 2,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  "${NoteTileDisplay.displayTime(
-                                    widget.notesToBeDisplayed[index].timeStamp,
-                                  )}",
-                                  overflow: TextOverflow.fade,
-                                  style: TextStyle(color: Colors.white38),
-                                ),
-                                Expanded(
-                                    child: Padding(
-                                  padding: EdgeInsets.only(
-                                      left: SizeConfig.blockSizeHorizontal * 3),
-                                  child: Container(
-                                    child: Text(
-                                      "${NoteTileDisplay.displayContent(widget.notesToBeDisplayed[index].content)}",
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      style: TextStyle(color: Colors.white60),
-                                    ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${NoteTileDisplay.displayTime(
+                                      widget
+                                          .notesToBeDisplayed[index].timeStamp,
+                                    )}",
+                                    overflow: TextOverflow.fade,
+                                    style: TextStyle(color: Colors.white38),
                                   ),
-                                )),
-
-                              ],
-                            ),
-                            SizedBox(
-                              height: SizeConfig.blockSizeVertical * 2,
-                            ),
-                            Row(
-                              children: [
-                                for (var tag in widget
-                                    .notesToBeDisplayed[index]
-                                    .associatedTags)
-                                  TagDisplayWidget(tag: tag),
-                                Spacer(),
-                                Icon(
-                                  Icons.star,
-                                  color: widget.notesToBeDisplayed[index]
-                                      .isFavorite ==
-                                      true
-                                      ? Colors.amber
-                                      : Colors.white10,
-                                )
-                              ],
-                            ),
-                          ],
+                                  Expanded(
+                                      child: Padding(
+                                    padding: EdgeInsets.only(
+                                        left:
+                                            SizeConfig.blockSizeHorizontal * 3),
+                                    child: Container(
+                                      child: Text(
+                                        "${NoteTileDisplay.displayContent(widget.notesToBeDisplayed[index].content)}",
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: TextStyle(color: Colors.white60),
+                                      ),
+                                    ),
+                                  )),
+                                ],
+                              ),
+                              SizedBox(
+                                height: SizeConfig.blockSizeVertical * 2,
+                              ),
+                              Row(
+                                children: [
+                                  for (var tag in widget
+                                      .notesToBeDisplayed[index].associatedTags)
+                                    TagDisplayWidget(tag: tag),
+                                  Spacer(),
+                                  Icon(
+                                    Icons.star,
+                                    color: widget.notesToBeDisplayed[index]
+                                                .isFavorite ==
+                                            true
+                                        ? Colors.amber
+                                        : Colors.white10,
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -215,4 +222,3 @@ class _NotesListScreenState extends State<NotesListScreen> {
     );
   }
 }
-
