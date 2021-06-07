@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:topnotes/cubits/folders/folder_cubit.dart';
 import 'package:topnotes/data/models/notes_model.dart';
 import 'package:topnotes/internal/constants.dart';
 import 'package:topnotes/internal/size_config.dart';
@@ -55,7 +57,47 @@ class _NotesListScreenState extends State<NotesListScreen> {
       ),
       title: Text("${selectedList.length}"),
       actions: [
-        IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
+        widget.screenTitle == "Trash"
+            ? IconButton(
+                onPressed: () {
+                  for (var i in selectedList) {
+                    BlocProvider.of<FolderCubit>(context).addNoteToFolder(
+                        'All Notes', widget.notesToBeDisplayed[i]);
+                    BlocProvider.of<FolderCubit>(context).removeNoteFromFolder(
+                        'Trash', widget.notesToBeDisplayed[i]);
+                  }
+                  setState(() {
+                    selectedList = [];
+                    triggerGlobalSelection = false;
+                  });
+                },
+                icon: Icon(Icons.restore))
+            : Text(''),
+        IconButton(
+            onPressed: () {
+              if (widget.screenTitle != "Trash") {
+                for (var note in selectedList) {
+                  BlocProvider.of<FolderCubit>(context)
+                      .moveNoteToTrash(widget.notesToBeDisplayed[note]);
+                }
+                setState(() {
+                  selectedList = [];
+                  triggerGlobalSelection = false;
+                });
+              }
+              else {
+                for (var note in selectedList) {
+                  BlocProvider.of<FolderCubit>(context).removeNoteFromFolder("Trash", widget.notesToBeDisplayed[note]);
+                }
+
+                setState(() {
+                  selectedList = [];
+                  triggerGlobalSelection = false;
+                });
+              }
+            }
+            ,
+            icon: Icon(Icons.delete)),
         IconButton(onPressed: () {}, icon: Icon(Icons.more_vert))
       ],
     );
@@ -81,14 +123,12 @@ class _NotesListScreenState extends State<NotesListScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        if(triggerGlobalSelection == true) {
+        if (triggerGlobalSelection == true) {
           setState(() {
             selectedList = [];
             triggerGlobalSelection = false;
           });
-        }
-
-        else if (triggerGlobalSelection == false && 1 == 1) {
+        } else if (triggerGlobalSelection == false && 1 == 1) {
           Navigator.pop(context, true);
           return Future.value(true);
         }
