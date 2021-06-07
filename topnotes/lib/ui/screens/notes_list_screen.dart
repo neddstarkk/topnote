@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:topnotes/data/models/notes_model.dart';
+import 'package:topnotes/data/models/tags_model.dart';
 import 'package:topnotes/internal/constants.dart';
 import 'package:topnotes/internal/size_config.dart';
 import 'package:topnotes/ui/screens/note_page.dart';
 import 'package:topnotes/ui/widgets/notes_list_page_widgets/empty_state_widget.dart';
+import 'package:topnotes/ui/widgets/notes_list_page_widgets/tag_display_widget.dart';
 
 class NotesListScreen extends StatefulWidget {
   final String screenTitle;
@@ -133,7 +135,8 @@ class _NotesListScreenState extends State<NotesListScreen> {
                               ? Colors.white70
                               : Colors.white10,
                           borderRadius: BorderRadius.circular(
-                              SizeConfig.blockSizeHorizontal),
+                            SizeConfig.blockSizeHorizontal,
+                          ),
                         ),
                         padding: EdgeInsets.symmetric(
                           horizontal: SizeConfig.blockSizeHorizontal * 5,
@@ -157,7 +160,6 @@ class _NotesListScreenState extends State<NotesListScreen> {
                               ),
                             ),
                             Row(
-                              mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
                                   "${NoteTileDisplay.displayTime(
@@ -179,41 +181,27 @@ class _NotesListScreenState extends State<NotesListScreen> {
                                     ),
                                   ),
                                 )),
-                                SizedBox(
-                                  height: SizeConfig.blockSizeVertical * 2,
-                                ),
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    for (var tag in widget
-                                        .notesToBeDisplayed[index]
-                                        .associatedTags)
-                                      Container(
-                                        padding: EdgeInsets.all(
-                                            SizeConfig.blockSizeHorizontal),
-                                        decoration: BoxDecoration(
-                                          color: Color(0xFF687581),
-                                          borderRadius: BorderRadius.circular(
-                                            SizeConfig.blockSizeVertical * 10,
-                                          ),
-                                        ),
-                                        child: Text(
-                                          "#${tag.tagName}",
-                                          style:
-                                              TextStyle(color: Colors.white70),
-                                        ),
-                                      ),
-                                    Spacer(),
-                                    Icon(
-                                      Icons.star,
-                                      color: widget.notesToBeDisplayed[index]
-                                                  .isFavorite ==
-                                              true
-                                          ? Colors.amber
-                                          : Colors.white10,
-                                    )
-                                  ],
-                                ),
+
+                              ],
+                            ),
+                            SizedBox(
+                              height: SizeConfig.blockSizeVertical * 2,
+                            ),
+                            Row(
+                              children: [
+                                for (var tag in widget
+                                    .notesToBeDisplayed[index]
+                                    .associatedTags)
+                                  TagDisplayWidget(tag: tag),
+                                Spacer(),
+                                Icon(
+                                  Icons.star,
+                                  color: widget.notesToBeDisplayed[index]
+                                      .isFavorite ==
+                                      true
+                                      ? Colors.amber
+                                      : Colors.white10,
+                                )
                               ],
                             ),
                           ],
@@ -227,3 +215,4 @@ class _NotesListScreenState extends State<NotesListScreen> {
     );
   }
 }
+
