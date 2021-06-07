@@ -94,6 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         title: Text(
           "New Tag",
+          style: textStyle,
         ),
         onTap: () => addTag(context),
       ),
@@ -104,6 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         title: Text(
           "New Folder",
+          style: textStyle,
         ),
         onTap: () {
           addFolder(context);
@@ -116,6 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         title: Text(
           "New Note",
+          style: textStyle,
         ),
         onTap: () async {
           var result = await Navigator.push(
@@ -154,6 +157,8 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         child: Icon(
           Icons.add,
+          color: iconColor,
+          size: SizeConfig.blockSizeVertical * 3,
         ),
       ),
     );
@@ -191,14 +196,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     return ListTile(
                       title: Text(
                         "${state[index].folderName}",
+                        style: textStyle,
                       ),
                       leading: state[index].icon != null
                           ? state[index].icon
                           : Icon(
                               Icons.folder_outlined,
+                              color: iconColor,
                             ),
                       trailing: Text(
                         "${state[index].notesUnderFolder.length}",
+                        style: textStyle,
                       ),
                       onTap: () async {
                         var result = await Navigator.push(
@@ -233,12 +241,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       ListTile(
                         leading: Icon(
                           Icons.local_offer_outlined,
+                          color: iconColor,
                         ),
                         title: Text(
                           "${tag.tagName}",
+                          style: textStyle,
                         ),
                         trailing: Text(
                           "${tag.notesUnderTag.length}",
+                          style: textStyle,
                         ),
                       ),
                   ],

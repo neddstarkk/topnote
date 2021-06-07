@@ -30,10 +30,11 @@ class NoteTileDisplay {
   }
 }
 
-Color iconColor = Color(0xFFFFFFFF).withOpacity(0.6);
+Color iconColor = Colors.white70;
 
 class AppColors {
   static Color backgroundColor = Color(0xFF1C1C1C);
-  static Color textColor = Color(0xFFFFFFFF);
-  
+  static Color textColor = Colors.white70;
 }
+
+TextStyle textStyle = TextStyle(color: AppColors.textColor);

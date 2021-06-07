@@ -31,9 +31,7 @@ class _NotesListScreenState extends State<NotesListScreen> {
       title: Text(
         "${widget.screenTitle}",
         style: TextStyle(
-          fontSize: SizeConfig.blockSizeVertical * 4,
-          color: Colors.white70
-        ),
+            fontSize: SizeConfig.blockSizeVertical * 4, color: Colors.white70),
       ),
       automaticallyImplyLeading: false,
       elevation: 0,
@@ -43,6 +41,23 @@ class _NotesListScreenState extends State<NotesListScreen> {
     AppBar newAppBar = AppBar(
       toolbarHeight: SizeConfig.blockSizeVertical * 10,
       backgroundColor: AppColors.backgroundColor,
+      leading: IconButton(
+        onPressed: () {
+          setState(() {
+            selectedList = [];
+            triggerGlobalSelection = false;
+          });
+        },
+        icon: Icon(
+          Icons.clear,
+          size: SizeConfig.blockSizeVertical * 3,
+        ),
+      ),
+      title: Text("${selectedList.length}"),
+      actions: [
+        IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
+        IconButton(onPressed: () {}, icon: Icon(Icons.more_vert))
+      ],
     );
 
     if (triggerGlobalSelection == true) {
@@ -66,11 +81,18 @@ class _NotesListScreenState extends State<NotesListScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        if (1 == 1) {
-          Navigator.pop(context, true);
+        if(triggerGlobalSelection == true) {
+          setState(() {
+            selectedList = [];
+            triggerGlobalSelection = false;
+          });
         }
 
-        return Future.value(true);
+        else if (triggerGlobalSelection == false && 1 == 1) {
+          Navigator.pop(context, true);
+          return Future.value(true);
+        }
+        return Future.value(false);
       },
       child: Scaffold(
         appBar: assignAppbar(),
@@ -137,7 +159,10 @@ class _NotesListScreenState extends State<NotesListScreen> {
                         child: Container(
                           decoration: BoxDecoration(
                             color: Colors.white10,
-                            border: Border.all(color: selectedList.contains(index) == true ? Color(0xFFD8D8D8) : Colors.transparent),
+                            border: Border.all(
+                                color: selectedList.contains(index) == true
+                                    ? Color(0xFFD8D8D8)
+                                    : Colors.transparent),
                             borderRadius: BorderRadius.circular(
                               SizeConfig.blockSizeHorizontal,
                             ),

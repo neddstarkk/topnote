@@ -81,8 +81,8 @@ class _FakeFabState extends State<FakeFab> with SingleTickerProviderStateMixin {
           onLongPress: widget.onLongPress,
           customBorder: widget.shape,
           child: Container(
-            width: 56,
-            height: 56,
+            width: 60,
+            height: 60,
             child: Theme(
               data: theme.copyWith(
                 iconTheme: theme.iconTheme.copyWith(
