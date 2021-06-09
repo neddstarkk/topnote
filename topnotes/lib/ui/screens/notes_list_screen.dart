@@ -12,7 +12,7 @@ import 'package:topnotes/ui/widgets/notes_list_page_widgets/tag_display_widget.d
 
 class NotesListScreen extends StatefulWidget {
   final String screenTitle;
-  final List<Note> notesToBeDisplayed;
+  List<Note> notesToBeDisplayed;
 
   NotesListScreen(
       {@required this.notesToBeDisplayed, @required this.screenTitle});
@@ -55,11 +55,10 @@ class _NotesListScreenState extends State<NotesListScreen> {
                 },
                 onSelected: (value) {
                   if(value == 0) {
-                    for(var note in widget.notesToBeDisplayed) {
-                      setState(() {
-                        BlocProvider.of<FolderCubit>(context).removeNoteFromFolder("Trash", note);
-                      });
-                    }
+                    setState(() {
+                      BlocProvider.of<FolderCubit>(context).emptyFolder("Trash");
+                      widget.notesToBeDisplayed = [];
+                    });
                   }
                 },
               )

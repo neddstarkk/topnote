@@ -75,6 +75,13 @@ class FolderCubit extends Cubit<List<Folder>> {
     addNoteToFolder('Trash', note);
   }
 
+  void emptyFolder(String folderName) {
+    Folder targetFolder = folderList.firstWhere((folder) => folder.folderName == folderName);
+    targetFolder.notesUnderFolder = [];
+
+    emit(folderList);
+  }
+
   bool checkNoteInFolder(String nameOfFolder, Note note) {
     Folder targetFolder = folderList.firstWhere((folder) => folder.folderName == nameOfFolder);
 
