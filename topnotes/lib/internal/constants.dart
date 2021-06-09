@@ -38,3 +38,10 @@ class AppColors {
 }
 
 TextStyle textStyle = TextStyle(color: AppColors.textColor);
+
+var appBarContextButtonStyle = ButtonStyle(
+  shape: MaterialStateProperty.resolveWith<OutlinedBorder>(
+      (states) => StadiumBorder()),
+  overlayColor: MaterialStateProperty.resolveWith((states) => Colors.white10),
+  foregroundColor: MaterialStateProperty.resolveWith((states) => iconColor),
+);

@@ -6,6 +6,7 @@ import 'package:topnotes/data/models/notes_model.dart';
 import 'package:topnotes/internal/constants.dart';
 import 'package:topnotes/internal/size_config.dart';
 import 'package:topnotes/ui/screens/note_page.dart';
+import 'package:topnotes/ui/widgets/home_screen_widgets/custom_appbar_row.dart';
 import 'package:topnotes/ui/widgets/notes_list_page_widgets/empty_state_widget.dart';
 import 'package:topnotes/ui/widgets/notes_list_page_widgets/tag_display_widget.dart';
 
@@ -29,19 +30,45 @@ class _NotesListScreenState extends State<NotesListScreen> {
 
   AppBar assignAppbar() {
     AppBar defaultAppBar = AppBar(
-      toolbarHeight: SizeConfig.blockSizeVertical * 10,
+      toolbarHeight: SizeConfig.blockSizeVertical * 8,
       title: Text(
         "${widget.screenTitle}",
         style: TextStyle(
-            fontSize: SizeConfig.blockSizeVertical * 4, color: Colors.white70),
+            fontSize: SizeConfig.blockSizeVertical * 4,
+            color: AppColors.textColor),
       ),
       automaticallyImplyLeading: false,
       elevation: 0,
       backgroundColor: AppColors.backgroundColor,
+      actions: [
+        widget.screenTitle == "Trash" && widget.notesToBeDisplayed.isNotEmpty
+            ? PopupMenuButton(
+                itemBuilder: (context) {
+                  return [
+                    PopupMenuItem(
+                        value: 0,
+                        child: IconTextWidget(
+                          icon: Icon(Icons.delete_forever),
+                          text: "Empty Trash",
+                        ))
+                  ];
+                },
+                onSelected: (value) {
+                  if(value == 0) {
+                    for(var note in widget.notesToBeDisplayed) {
+                      setState(() {
+                        BlocProvider.of<FolderCubit>(context).removeNoteFromFolder("Trash", note);
+                      });
+                    }
+                  }
+                },
+              )
+            : Text(""),
+      ],
     );
 
     AppBar newAppBar = AppBar(
-      toolbarHeight: SizeConfig.blockSizeVertical * 10,
+      toolbarHeight: SizeConfig.blockSizeVertical * 8,
       backgroundColor: AppColors.backgroundColor,
       leading: IconButton(
         onPressed: () {
@@ -53,52 +80,82 @@ class _NotesListScreenState extends State<NotesListScreen> {
         icon: Icon(
           Icons.clear,
           size: SizeConfig.blockSizeVertical * 3,
+          color: iconColor,
         ),
       ),
-      title: Text("${selectedList.length}"),
+      title: Text(
+        "${selectedList.length}",
+        style: TextStyle(color: AppColors.textColor),
+      ),
       actions: [
         widget.screenTitle == "Trash"
-            ? IconButton(
-                onPressed: () {
-                  for (var i in selectedList) {
-                    BlocProvider.of<FolderCubit>(context).addNoteToFolder(
-                        'All Notes', widget.notesToBeDisplayed[i]);
-                    BlocProvider.of<FolderCubit>(context).removeNoteFromFolder(
-                        'Trash', widget.notesToBeDisplayed[i]);
+            ? Padding(
+                padding: EdgeInsets.only(right: 10),
+                child: TextButton.icon(
+                    onPressed: () {
+                      for (var i in selectedList) {
+                        BlocProvider.of<FolderCubit>(context).addNoteToFolder(
+                            'All Notes', widget.notesToBeDisplayed[i]);
+                        BlocProvider.of<FolderCubit>(context)
+                            .removeNoteFromFolder(
+                                'Trash', widget.notesToBeDisplayed[i]);
+                      }
+                      setState(() {
+                        selectedList = [];
+                        triggerGlobalSelection = false;
+                      });
+                    },
+                    icon: Icon(Icons.restore),
+                    label: Text("Restore"),
+                    style: appBarContextButtonStyle),
+              )
+            : Padding(
+                padding: EdgeInsets.only(right: 10),
+                child: TextButton.icon(
+                  onPressed: () {
+                    if (widget.screenTitle != "Trash") {
+                      for (var note in selectedList) {
+                        BlocProvider.of<FolderCubit>(context)
+                            .moveNoteToTrash(widget.notesToBeDisplayed[note]);
+                      }
+                      setState(() {
+                        selectedList = [];
+                        triggerGlobalSelection = false;
+                      });
+                    }
+                  },
+                  icon: Icon(Icons.delete),
+                  label: Text("Delete"),
+                  style: appBarContextButtonStyle,
+                ),
+              ),
+        widget.screenTitle == "Trash"
+            ? PopupMenuButton(
+                onSelected: (value) {
+                  if (value == 0) {
+                    for (var i in selectedList) {
+                      BlocProvider.of<FolderCubit>(context)
+                          .removeNoteFromFolder(
+                              "Trash", widget.notesToBeDisplayed[i]);
+                    }
+                    setState(() {
+                      selectedList = [];
+                      triggerGlobalSelection = false;
+                    });
                   }
-                  setState(() {
-                    selectedList = [];
-                    triggerGlobalSelection = false;
-                  });
                 },
-                icon: Icon(Icons.restore))
-            : Text(''),
-        IconButton(
-            onPressed: () {
-              if (widget.screenTitle != "Trash") {
-                for (var note in selectedList) {
-                  BlocProvider.of<FolderCubit>(context)
-                      .moveNoteToTrash(widget.notesToBeDisplayed[note]);
-                }
-                setState(() {
-                  selectedList = [];
-                  triggerGlobalSelection = false;
-                });
-              }
-              else {
-                for (var note in selectedList) {
-                  BlocProvider.of<FolderCubit>(context).removeNoteFromFolder("Trash", widget.notesToBeDisplayed[note]);
-                }
-
-                setState(() {
-                  selectedList = [];
-                  triggerGlobalSelection = false;
-                });
-              }
-            }
-            ,
-            icon: Icon(Icons.delete)),
-        IconButton(onPressed: () {}, icon: Icon(Icons.more_vert))
+                itemBuilder: (context) {
+                  return [
+                    PopupMenuItem(
+                        value: 0,
+                        child: IconTextWidget(
+                          icon: Icon(Icons.delete),
+                          text: "Delete",
+                        ))
+                  ];
+                },
+              )
+            : Text(""),
       ],
     );
 
@@ -107,6 +164,10 @@ class _NotesListScreenState extends State<NotesListScreen> {
     }
 
     return defaultAppBar;
+  }
+
+  void displaySelectOptions() {
+    showDialog(context: context, builder: (context) => Container());
   }
 
   @override

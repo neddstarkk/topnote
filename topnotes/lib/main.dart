@@ -30,6 +30,8 @@ class TopNotesApp extends StatelessWidget {
         scaffoldBackgroundColor: AppColors.backgroundColor,
         backgroundColor: AppColors.backgroundColor,
         brightness: Brightness.dark,
+        splashColor: Colors.white10,
+        splashFactory: InkRipple.splashFactory
       ),
       home: HomeScreen(),
     );

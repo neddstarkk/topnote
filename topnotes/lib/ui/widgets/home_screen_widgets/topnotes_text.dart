@@ -22,7 +22,7 @@ class TopnotesText extends StatelessWidget {
           ),
           // GestureDetector(
           //   onTap: () {},
-          //   child: CustomAppBarRow(),
+          //   child: CustomAppBarRow(icon: Icon(Icons.settings), text: "Settings"),
           // ),
         ],
       ),
