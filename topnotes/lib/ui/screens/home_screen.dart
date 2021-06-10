@@ -17,8 +17,6 @@ import 'package:topnotes/ui/widgets/home_screen_widgets/folders_display.dart';
 import 'package:topnotes/ui/widgets/home_screen_widgets/tags_text.dart';
 import 'package:topnotes/ui/widgets/home_screen_widgets/topnotes_text.dart';
 
-import 'notes_list_screen.dart';
-
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -33,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   ScrollController scrollController =
       ScrollController(initialScrollOffset: 0.0);
   bool selected = false;
+  bool tagDeleteState = false;
 
   void addFolder(BuildContext context) {
     showDialog(
@@ -195,25 +194,32 @@ class _HomeScreenState extends State<HomeScreen> {
             // tags list view
             BlocBuilder<TagCubit, List<Tag>>(
               builder: (context, state) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    for (var tag in state)
-                      ListTile(
-                        leading: Icon(
-                          Icons.local_offer_outlined,
-                          color: iconColor,
-                        ),
-                        title: Text(
-                          "${tag.tagName}",
-                          style: textStyle,
-                        ),
-                        trailing: Text(
-                          "${tag.notesUnderTag.length}",
-                          style: textStyle,
-                        ),
+                return GridView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: state.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 4,
+                    childAspectRatio: 1.8,
+                  ),
+                  itemBuilder: (context, index) => Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: GestureDetector(
+                      onLongPress: () {
+                        setState(() {
+                          tagDeleteState = true;
+                        });
+                      },
+                      child: Chip(
+                        avatar: Icon(Icons.tag),
+                        label: Text("${state[index].tagName}"),
+                        deleteIcon: tagDeleteState == false
+                            ? Text("${state[index].notesUnderTag.length}")
+                            : Icon(Icons.cancel),
+                        onDeleted: () {},
                       ),
-                  ],
+                    ),
+                  ),
                 );
               },
             ),
