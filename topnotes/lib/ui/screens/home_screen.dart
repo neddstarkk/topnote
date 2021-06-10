@@ -238,21 +238,31 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   itemBuilder: (context, index) => Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: GestureDetector(
-                      onLongPress: () {
-                        print("Long pressed");
-                        setState(() {
-                          deleteState = true;
-                        });
-                      },
-                      child: Chip(
-                        avatar: Icon(Icons.tag),
-                        label: Text("${state[index].tagName}"),
-                        useDeleteButtonTooltip: false,
-                        deleteIcon: deleteState == false
-                            ? Text("${state[index].notesUnderTag.length}")
-                            : Icon(Icons.clear, color: Colors.red,),
-                        onDeleted: () {},
+                    child: Transform.rotate(
+                      angle: deleteState == false ? 0 : 0.1,
+                      child: GestureDetector(
+                        onLongPress: () {
+                          setState(() {
+                            deleteState = true;
+                          });
+                        },
+                        child: Chip(
+                          avatar: Icon(Icons.tag),
+                          label: Text("${state[index].tagName}"),
+                          useDeleteButtonTooltip: false,
+                          deleteIcon: deleteState == false
+                              ? Text("${state[index].notesUnderTag.length}")
+                              : Icon(
+                                  Icons.clear,
+                                  color: Colors.red,
+                                ),
+                          onDeleted: () {
+                            setState(() {
+                              BlocProvider.of<TagCubit>(context)
+                                  .deleteTag(state[index].tagName);
+                            });
+                          },
+                        ),
                       ),
                     ),
                   ),

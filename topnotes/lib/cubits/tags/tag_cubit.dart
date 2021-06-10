@@ -32,6 +32,14 @@ class TagCubit extends Cubit<List<Tag>> {
     emit(tagList);
   }
 
+  void deleteTag(String tagName) {
+    Tag targetTag = tagList.firstWhere((element) => element.tagName == tagName);
+
+    tagList.remove(targetTag);
+
+    emit(tagList);
+  }
+
   List<Tag> getTagList() {
     return tagList;
   }
