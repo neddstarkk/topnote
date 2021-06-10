@@ -15,7 +15,6 @@ import 'package:topnotes/ui/widgets/home_screen_widgets/fake_fab.dart';
 import 'package:topnotes/ui/widgets/home_screen_widgets/folder_text.dart';
 import 'package:topnotes/ui/widgets/home_screen_widgets/folders_display.dart';
 import 'package:topnotes/ui/widgets/home_screen_widgets/tags_text.dart';
-import 'package:topnotes/ui/widgets/home_screen_widgets/topnotes_text.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -31,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   ScrollController scrollController =
       ScrollController(initialScrollOffset: 0.0);
   bool selected = false;
-  bool tagDeleteState = false;
+  bool deleteState = false;
 
   void addFolder(BuildContext context) {
     showDialog(
@@ -164,10 +163,45 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  AppBar assignAppBar() {
+    AppBar defaultAppBar = AppBar(
+      toolbarHeight: SizeConfig.blockSizeVertical * 10,
+      backgroundColor: AppColors.backgroundColor,
+      elevation: 0,
+      title: Text(
+        "TopNotes",
+        style: TextStyle(
+          fontSize: SizeConfig.blockSizeVertical * 4,
+          color: AppColors.textColor,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+    AppBar newAppBar = AppBar(
+      backgroundColor: AppColors.backgroundColor,
+      toolbarHeight: SizeConfig.blockSizeVertical * 10,
+      elevation: 0,
+      title: Text("Delete Tags & Folders"),
+      leading: IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          setState(() {
+            deleteState = false;
+          });
+        },
+      ),
+    );
+
+    if (deleteState == true) return newAppBar;
+
+    return defaultAppBar;
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
+      appBar: assignAppBar(),
       floatingActionButton: fab,
       body: GestureDetector(
         onTap: () {
@@ -180,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
           physics: BouncingScrollPhysics(),
           children: [
             // TopNotes text padding
-            TopnotesText(),
+            // TopnotesText(),
 
             // Folders text padding
             FolderText(),
@@ -206,16 +240,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: GestureDetector(
                       onLongPress: () {
+                        print("Long pressed");
                         setState(() {
-                          tagDeleteState = true;
+                          deleteState = true;
                         });
                       },
                       child: Chip(
                         avatar: Icon(Icons.tag),
                         label: Text("${state[index].tagName}"),
-                        deleteIcon: tagDeleteState == false
+                        useDeleteButtonTooltip: false,
+                        deleteIcon: deleteState == false
                             ? Text("${state[index].notesUnderTag.length}")
-                            : Icon(Icons.cancel),
+                            : Icon(Icons.clear, color: Colors.red,),
                         onDeleted: () {},
                       ),
                     ),
