@@ -13,6 +13,7 @@ import 'package:topnotes/internal/size_config.dart';
 import 'package:topnotes/ui/screens/note_page.dart';
 import 'package:topnotes/ui/widgets/home_screen_widgets/fake_fab.dart';
 import 'package:topnotes/ui/widgets/home_screen_widgets/folder_text.dart';
+import 'package:topnotes/ui/widgets/home_screen_widgets/folders_display.dart';
 import 'package:topnotes/ui/widgets/home_screen_widgets/tags_text.dart';
 import 'package:topnotes/ui/widgets/home_screen_widgets/topnotes_text.dart';
 
@@ -186,47 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
             FolderText(),
 
             // Folders Listview
-            BlocBuilder<FolderCubit, List<Folder>>(
-              builder: (context, state) {
-                return ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: state.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(
-                        "${state[index].folderName}",
-                        style: textStyle,
-                      ),
-                      leading: state[index].icon != null
-                          ? state[index].icon
-                          : Icon(
-                              Icons.folder_outlined,
-                              color: iconColor,
-                            ),
-                      trailing: Text(
-                        "${state[index].notesUnderFolder.length}",
-                        style: textStyle,
-                      ),
-                      onTap: () async {
-                        var result = await Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => NotesListScreen(
-                              screenTitle: state[index].folderName,
-                              notesToBeDisplayed: state[index].notesUnderFolder,
-                            ),
-                          ),
-                        );
-                        if (result == true) {
-                          setState(() {});
-                        }
-                      },
-                    );
-                  },
-                );
-              },
-            ),
+            FoldersDisplay(),
 
             // Tags text padding
             TagsText(),
