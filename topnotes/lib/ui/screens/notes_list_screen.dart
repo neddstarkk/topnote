@@ -54,9 +54,10 @@ class _NotesListScreenState extends State<NotesListScreen> {
                   ];
                 },
                 onSelected: (value) {
-                  if(value == 0) {
+                  if (value == 0) {
                     setState(() {
-                      BlocProvider.of<FolderCubit>(context).emptyFolder("Trash");
+                      BlocProvider.of<FolderCubit>(context)
+                          .emptyFolder("Trash");
                       widget.notesToBeDisplayed = [];
                     });
                   }
@@ -323,7 +324,10 @@ class _NotesListScreenState extends State<NotesListScreen> {
                                 children: [
                                   for (var tag in widget
                                       .notesToBeDisplayed[index].associatedTags)
-                                    TagDisplayWidget(tag: tag),
+                                    TagDisplayWidget(
+                                      tag: tag,
+                                      note: widget.notesToBeDisplayed[index],
+                                    ),
                                   Spacer(),
                                   Icon(
                                     Icons.star,

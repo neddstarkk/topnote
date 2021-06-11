@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:collection/collection.dart';
 import 'package:topnotes/data/models/folder_model.dart';
 import 'package:topnotes/data/models/notes_model.dart';
+import 'package:topnotes/data/models/tags_model.dart';
 import 'package:topnotes/data/repository/folder_repository.dart';
 
 class FolderCubit extends Cubit<List<Folder>> {
@@ -30,11 +31,12 @@ class FolderCubit extends Cubit<List<Folder>> {
   }
 
   void updateNote(Note note) {
+    var targetFolders =
+        folderList.where((element) => note.associatedFolders.contains(element));
 
-    var targetFolders = folderList.where((element) => note.associatedFolders.contains(element));
-
-    for(var folder in targetFolders) {
-      var targetNote = folder.notesUnderFolder.firstWhere((element) => element.noteId == note.noteId);
+    for (var folder in targetFolders) {
+      var targetNote = folder.notesUnderFolder
+          .firstWhere((element) => element.noteId == note.noteId);
       folder.notesUnderFolder.remove(targetNote);
       targetNote = note;
       folder.notesUnderFolder.add(targetNote);
@@ -45,30 +47,47 @@ class FolderCubit extends Cubit<List<Folder>> {
 
   void favoriteNote(Note note) {
     updateNote(note);
-    Folder favFolder = folderList.firstWhere((element) => element.folderName == "Favorites");
-    var contain = favFolder.notesUnderFolder.where((element) => element.noteId == note.noteId);
-    if(favFolder.notesUnderFolder.isEmpty || contain.isEmpty) {
+    Folder favFolder =
+        folderList.firstWhere((element) => element.folderName == "Favorites");
+    var contain = favFolder.notesUnderFolder
+        .where((element) => element.noteId == note.noteId);
+    if (favFolder.notesUnderFolder.isEmpty || contain.isEmpty) {
       addNoteToFolder('Favorites', note);
-    }
-    else if (contain.isNotEmpty) {
+    } else if (contain.isNotEmpty) {
       removeNoteFromFolder('Favorites', note);
     }
   }
 
   void removeNoteFromFolder(String nameOfFolder, Note note) {
     Folder targetFolder =
-    folderList.firstWhere((folder) => folder.folderName == nameOfFolder);
+        folderList.firstWhere((folder) => folder.folderName == nameOfFolder);
 
-    targetFolder.notesUnderFolder.removeWhere((element) => element.noteId == note.noteId);
+    targetFolder.notesUnderFolder
+        .removeWhere((element) => element.noteId == note.noteId);
+
+    emit(folderList);
+  }
+
+  void removeTagFromNote(Tag tag, Note note) {
+    var targetFolders =
+        folderList.where((element) => element.notesUnderFolder.contains(note));
+
+    for (var folder in targetFolders) {
+      Note targetNote =
+          folder.notesUnderFolder.firstWhere((element) => element == note);
+      targetNote.associatedTags.remove(tag);
+    }
 
     emit(folderList);
   }
 
   void moveNoteToTrash(Note note) {
-    var targetFolders = folderList.where((element) => note.associatedFolders.contains(element));
+    var targetFolders =
+        folderList.where((element) => note.associatedFolders.contains(element));
 
-    for(var folder in targetFolders) {
-      var targetNote = folder.notesUnderFolder.firstWhere((element) => element.noteId == note.noteId);
+    for (var folder in targetFolders) {
+      var targetNote = folder.notesUnderFolder
+          .firstWhere((element) => element.noteId == note.noteId);
       folder.notesUnderFolder.remove(targetNote);
     }
 
@@ -76,14 +95,16 @@ class FolderCubit extends Cubit<List<Folder>> {
   }
 
   void emptyFolder(String folderName) {
-    Folder targetFolder = folderList.firstWhere((folder) => folder.folderName == folderName);
+    Folder targetFolder =
+        folderList.firstWhere((folder) => folder.folderName == folderName);
     targetFolder.notesUnderFolder = [];
 
     emit(folderList);
   }
 
   bool checkNoteInFolder(String nameOfFolder, Note note) {
-    Folder targetFolder = folderList.firstWhere((folder) => folder.folderName == nameOfFolder);
+    Folder targetFolder =
+        folderList.firstWhere((folder) => folder.folderName == nameOfFolder);
 
     return targetFolder.notesUnderFolder.contains(note);
   }

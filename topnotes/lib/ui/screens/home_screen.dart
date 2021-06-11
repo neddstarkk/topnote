@@ -255,7 +255,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   icon: Icon(Icons.clear, color: Colors.red),
                                 ),
                       onLongPress: () {
-                        print("Long pressing here");
                         setState(() {
                           deleteState = true;
                         });
@@ -317,7 +316,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           onDeleted: () {
                             setState(() {
                               BlocProvider.of<TagCubit>(context)
-                                  .deleteTag(state[index].tagName);
+                                  .deleteTag(state[index].tagName, context);
                             });
                           },
                         ),

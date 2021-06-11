@@ -1,4 +1,7 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:topnotes/cubits/folders/folder_cubit.dart';
 import 'package:topnotes/data/models/notes_model.dart';
 import 'package:topnotes/data/models/tags_model.dart';
 
@@ -32,8 +35,12 @@ class TagCubit extends Cubit<List<Tag>> {
     emit(tagList);
   }
 
-  void deleteTag(String tagName) {
+  void deleteTag(String tagName, BuildContext context) {
     Tag targetTag = tagList.firstWhere((element) => element.tagName == tagName);
+
+    for (var i in targetTag.notesUnderTag) {
+      removeNoteFromTag(targetTag.tagName, i);
+    }
 
     tagList.remove(targetTag);
 
