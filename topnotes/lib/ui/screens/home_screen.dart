@@ -6,13 +6,12 @@ import 'package:topnotes/cubits/folders/folder_cubit.dart';
 import 'package:topnotes/cubits/tags/tag_cubit.dart';
 import 'package:topnotes/data/models/folder_model.dart';
 import 'package:topnotes/data/models/tags_model.dart';
-import 'package:topnotes/internal/global_key_registry.dart';
-import 'package:topnotes/internal/show_fab_menu.dart';
 import 'package:topnotes/internal/size_config.dart';
+import 'package:topnotes/internal/utils.dart';
 import 'package:topnotes/ui/screens/note_page.dart';
-import 'package:topnotes/ui/widgets/home_screen_widgets/build_folders_list_widget.dart';
-import 'package:topnotes/ui/widgets/home_screen_widgets/build_tags_list_widget.dart';
-import 'package:topnotes/ui/widgets/home_screen_widgets/fake_fab.dart';
+import 'package:topnotes/ui/widgets/home_screen_widgets/custom_fab.dart';
+import 'package:topnotes/ui/widgets/home_screen_widgets/folders_list_widget.dart';
+import 'package:topnotes/ui/widgets/home_screen_widgets/tags_list_widget.dart';
 import 'package:topnotes/ui/widgets/home_screen_widgets/folder_text.dart';
 import 'package:topnotes/ui/widgets/home_screen_widgets/tags_text.dart';
 import 'package:topnotes/ui/widgets/home_screen_widgets/topnotes_text.dart';
@@ -32,58 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ScrollController(initialScrollOffset: 0.0);
   bool selected = false;
 
-  void addFolder(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Add Folder"),
-            content: TextField(
-              controller: controller,
-              decoration: InputDecoration(hintText: "Enter Folder Name"),
-              textCapitalization: TextCapitalization.sentences,
-            ),
-            actions: [
-              // ignore: deprecated_member_use
-              TextButton(
-                child: Text("ADD"),
-                onPressed: () {
-                  final folderCubit = context.bloc<FolderCubit>();
-                  folderCubit.addNewFolder(controller.text);
-                  controller.clear();
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          );
-        });
-  }
-
-  void addTag(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Add Tag"),
-            content: TextField(
-              controller: controller,
-              decoration: InputDecoration(hintText: "Enter Tag Name"),
-            ),
-            actions: [
-              TextButton(
-                child: Text("ADD"),
-                onPressed: () {
-                  final tagCubit = context.bloc<TagCubit>();
-                  tagCubit.addNewTag(controller.text);
-                  controller.clear();
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          );
-        });
-  }
-
   List<Widget> get fabOptions {
     return [
       ListTile(
@@ -95,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
           "New Tag",
           style: TextStyle(color: Colors.white70),
         ),
-        onTap: () => addTag(context),
+        onTap: () => addTag(context, controller),
       ),
       ListTile(
         leading: Icon(
@@ -106,9 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
           "New Folder",
           style: TextStyle(color: Colors.white70),
         ),
-        onTap: () {
-          addFolder(context);
-        },
+        onTap: () => addFolder(context, controller),
       ),
       ListTile(
         leading: Icon(
@@ -123,59 +68,26 @@ class _HomeScreenState extends State<HomeScreen> {
           var result = await Navigator.push(
             context,
             CupertinoPageRoute(
-              builder: (context) => NotePage(),
+              builder: (_) => NotePage(),
             ),
           );
-          if(result == true) {
-            setState(() {
-
-            });
+          if (result == true) {
+            setState(() {});
           }
         },
       ),
     ];
   }
 
-  Widget get fab {
-    return Hero(
-      tag: "fabMenu",
-      child: FakeFab(
-        controller: scrollController,
-        onLongPress: () {
-          Utils.showFabMenu(context, fabOptions);
-        },
-        key: GlobalKeyRegistry.get("fab"),
-        shape: RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.circular(SizeConfig.blockSizeVertical * 10),
-        ),
-        onTap: () async {
-          var result = await Navigator.push(
-              context, CupertinoPageRoute(builder: (context) => NotePage()));
-          if(result == true) {
-            setState(() {
-
-            });
-          }
-        },
-        child: Icon(
-          Icons.add,
-          color: Color(0xFFDAC279),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      floatingActionButton: fab,
+      floatingActionButton:
+          CustomFloatingActionButton(setState, scrollController, fabOptions),
       body: GestureDetector(
         onTap: () {
-          setState(() {
-            selected = false;
-          });
+          setState(() => selected = false);
         },
         child: ListView(
           controller: scrollController,
@@ -189,8 +101,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
             // Folders Listview
             BlocBuilder<FolderCubit, List<Folder>>(
-              builder: (context, state) {
-                return buildFoldersList(state);
+              builder: (context, folders) {
+                return FoldersList(folders);
               },
             ),
 
@@ -199,11 +111,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
             // tags list view
             BlocBuilder<TagCubit, List<Tag>>(
-              builder: (context, state) {
+              builder: (context, tags) {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    for (var tag in state) buildTagsList(tag),
+                    for (var tag in tags) TagsList(tag),
                   ],
                 );
               },
