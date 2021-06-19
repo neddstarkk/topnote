@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
           "New Tag",
           style: TextStyle(color: Colors.white70),
         ),
-        onTap: () => addTag(context, controller),
+        onTap: () => Utils.addTag(context, controller),
       ),
       ListTile(
         leading: Icon(
@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
           "New Folder",
           style: TextStyle(color: Colors.white70),
         ),
-        onTap: () => addFolder(context, controller),
+        onTap: () => Utils.addFolder(context, controller),
       ),
       ListTile(
         leading: Icon(
