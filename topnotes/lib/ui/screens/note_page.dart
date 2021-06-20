@@ -99,6 +99,7 @@ class _NotePageState extends State<NotePage> {
                     border: InputBorder.none,
                   ),
                   onChanged: (text) {
+                    print(text);
                     Folder allNotes = repo.folders[0];
 
                     // if this is a new note and a change has just been made.

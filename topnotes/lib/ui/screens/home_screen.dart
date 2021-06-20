@@ -314,10 +314,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   color: Colors.red,
                                 ),
                           onDeleted: () {
-                            setState(() {
+
                               BlocProvider.of<TagCubit>(context)
                                   .deleteTag(state[index].tagName, context);
-                            });
+                            
                           },
                         ),
                       ),
