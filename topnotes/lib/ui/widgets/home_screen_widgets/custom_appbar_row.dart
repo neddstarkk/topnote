@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:topnotes/internal/constants.dart';
 import 'package:topnotes/internal/size_config.dart';
 
-class CustomAppBarRow extends StatelessWidget {
-  const CustomAppBarRow({
+class IconTextWidget extends StatelessWidget {
+  final String text;
+  final Icon icon;
+
+  const IconTextWidget({
+    this.icon,
+    this.text,
     Key key,
   }) : super(key: key);
 
@@ -12,18 +16,14 @@ class CustomAppBarRow extends StatelessWidget {
     return Container(
       child: Row(
         children: [
-          Icon(
-            Icons.settings,
-            color: tileIconColor,
-          ),
+          icon,
           Padding(
             padding: EdgeInsets.only(
               right: SizeConfig.blockSizeHorizontal * 4,
               left: SizeConfig.blockSizeHorizontal,
             ),
             child: Text(
-              "Settings",
-              style: TextStyle(color: tileIconColor),
+              "$text",
             ),
           )
         ],

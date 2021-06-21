@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:topnotes/cubits/tags/tag_cubit.dart';
 import 'package:topnotes/data/models/notes_model.dart';
 import 'package:topnotes/data/models/tags_model.dart';
+import 'package:topnotes/internal/constants.dart';
 import 'package:topnotes/internal/size_config.dart';
 import 'package:topnotes/ui/widgets/note_page_widgets/alert_dialog_folders.dart';
 
@@ -53,38 +54,40 @@ class _NoteOperationsState extends State<NoteOperations> {
             builder: (context) => Container(
               height: SizeConfig.blockSizeVertical * 12,
               width: SizeConfig.screenWidth,
-              color: Color(0xFF1A2B37),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ListTile(
                     leading: Icon(
                       Icons.folder_open_outlined,
-                      color: Color(0xFF2F4E60),
+                      color: iconColor,
                     ),
                     title: Text(
                       "Add to folder",
-                      style: TextStyle(color: Colors.white70),
+                      style: TextStyle(
+                          color: AppColors.textColor.withOpacity(0.8)),
                     ),
-                    enabled: widget.note != null ? true : false,
+                    enabled: widget.note == null,
                     onTap: () {
                       Navigator.pop(context);
                       showDialog(
                         context: context,
-                        builder: (context) => AlertDialogFolders(note: widget.note,),
+                        builder: (context) => AlertDialogFolders(
+                          note: widget.note,
+                        ),
                       );
                     },
                   ),
                   ListTile(
-                    enabled:
-                        tags.isNotEmpty && widget.note != null ? true : false,
+                    enabled: tags.isNotEmpty && widget.note == null,
                     leading: Icon(
                       Icons.local_offer_outlined,
-                      color: Color(0xFF2F4E60),
+                      color: iconColor,
                     ),
                     title: Text(
                       "Add tags",
-                      style: TextStyle(color: Colors.white70),
+                      style: TextStyle(
+                          color: AppColors.textColor.withOpacity(0.8)),
                     ),
                     onTap: () {
                       Navigator.pop(context);
@@ -103,7 +106,7 @@ class _NoteOperationsState extends State<NoteOperations> {
         },
         child: Icon(
           Icons.more_vert,
-          color: Colors.white70,
+          color: iconColor,
         ),
       ),
     );

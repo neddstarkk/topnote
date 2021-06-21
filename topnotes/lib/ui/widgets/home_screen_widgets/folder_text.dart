@@ -12,8 +12,10 @@ class FolderText extends StatelessWidget {
           bottom: SizeConfig.blockSizeVertical * 2),
       child: Text(
         "Folders",
-        style: tagTextStyle.copyWith(
-            fontSize: SizeConfig.blockSizeVertical * 2),
+        style: TextStyle(
+          fontSize: SizeConfig.blockSizeVertical * 2,
+          color: AppColors.textColor,
+        ),
       ),
     );
   }

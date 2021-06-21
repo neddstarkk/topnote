@@ -4,8 +4,8 @@ import 'package:topnotes/data/models/folder_model.dart';
 class FolderRepository {
   List<Folder> _folderRepo = [
     Folder(folderName: "All Notes", notesUnderFolder: [], typeOfFolder: 'ND'),
-    Folder(folderName: 'Favorites', notesUnderFolder: [], icon: Icon(Icons.star_border_outlined, color: Colors.amber), typeOfFolder: 'ND'),
-    Folder(folderName: 'Trash', notesUnderFolder: [], icon: Icon(Icons.delete_outline, color: Colors.red,), typeOfFolder: "ND"),
+    Folder(folderName: 'Favorites', notesUnderFolder: [], icon: Icon(Icons.star, color: Colors.amber), typeOfFolder: 'ND'),
+    Folder(folderName: 'Trash', notesUnderFolder: [], icon: Icon(Icons.delete, color: Colors.red,), typeOfFolder: "ND"),
 
   ];
 

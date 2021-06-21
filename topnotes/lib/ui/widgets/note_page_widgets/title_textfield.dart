@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:topnotes/data/models/notes_model.dart';
-import 'package:topnotes/internal/constants.dart';
 import 'package:topnotes/internal/size_config.dart';
 
 class TitleTextField extends StatelessWidget {
@@ -15,13 +14,13 @@ class TitleTextField extends StatelessWidget {
       cursorColor: Colors.white,
       controller: titleController,
       textCapitalization: TextCapitalization.sentences,
-      style: noteTitleTextStyle.copyWith(
+      style: TextStyle(
         fontSize: SizeConfig.blockSizeVertical * 2,
         fontWeight: FontWeight.bold,
       ),
       decoration: InputDecoration(
         hintText: "Title",
-        hintStyle: noteTitleTextStyle.copyWith(
+        hintStyle: TextStyle(
             fontSize: SizeConfig.blockSizeVertical * 2),
         border: InputBorder.none,
       ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:topnotes/internal/constants.dart';
 import 'package:topnotes/internal/size_config.dart';
 
 class ContentTextField extends StatelessWidget {
@@ -9,13 +8,13 @@ class ContentTextField extends StatelessWidget {
       cursorColor: Colors.white,
       keyboardType: TextInputType.multiline,
       maxLines: null,
-      style: noteTitleTextStyle.copyWith(
+      style: TextStyle(
         fontSize: SizeConfig.blockSizeVertical * 2,
       ),
       decoration: InputDecoration(
         border: InputBorder.none,
         hintText: "Content",
-        hintStyle: noteContentTextStyle.copyWith(
+        hintStyle: TextStyle(
           fontSize: SizeConfig.blockSizeVertical * 2,
         ),
       ),

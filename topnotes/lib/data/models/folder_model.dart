@@ -8,5 +8,10 @@ class Folder {
   List<Note> notesUnderFolder;
   Icon icon;
 
-  Folder({@required this.folderName, this.typeOfFolder,@required this.notesUnderFolder, this.icon});
+  Folder({
+    @required this.folderName,
+    this.typeOfFolder,
+    @required this.notesUnderFolder,
+    this.icon,
+  });
 }
