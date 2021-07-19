@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
               TextButton(
                 child: Text("ADD"),
                 onPressed: () {
-                  final folderCubit = context.bloc<FolderCubit>();
+                  final folderCubit = context.read<FolderCubit>();
                   folderCubit.addNewFolder(controller.text);
                   controller.clear();
                   Navigator.pop(context);
@@ -73,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
               TextButton(
                 child: Text("ADD"),
                 onPressed: () {
-                  final tagCubit = context.bloc<TagCubit>();
+                  final tagCubit = context.read<TagCubit>();
                   tagCubit.addNewTag(controller.text);
                   controller.clear();
                   Navigator.pop(context);

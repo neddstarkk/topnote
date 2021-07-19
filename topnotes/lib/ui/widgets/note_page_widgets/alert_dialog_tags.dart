@@ -16,7 +16,7 @@ class _AlertDialogTagsState extends State<AlertDialogTags> {
 
   @override
   Widget build(BuildContext context) {
-    var listOfTags = context.bloc<TagCubit>().getTagList();
+    var listOfTags = context.read<TagCubit>().getTagList();
 
     return AlertDialog(
       title: Text("Select Tags"),
