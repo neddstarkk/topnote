@@ -3,12 +3,10 @@ import 'package:topnotes/internal/size_config.dart';
 
 class Utils {
   static void showFabMenu(BuildContext context, List<Widget> items) {
-
     Widget child = LayoutBuilder(
       builder: (_, constraints) {
         final width = constraints.biggest.width;
         final height = constraints.biggest.height;
-        print(height);
         return Stack(
           children: [
             Positioned(
@@ -28,7 +26,9 @@ class Utils {
                         ? width / 1.65
                         : height < 900
                             ? width / 1.8
-                            : width / 3.5,
+                            : width < 700
+                                ? width / 2.2
+                                : width / 3.5,
                     child: ListView(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),

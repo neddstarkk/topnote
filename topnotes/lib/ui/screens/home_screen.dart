@@ -7,7 +7,6 @@ import 'package:topnotes/cubits/tags/tag_cubit.dart';
 import 'package:topnotes/data/models/folder_model.dart';
 import 'package:topnotes/data/models/tags_model.dart';
 import 'package:topnotes/internal/constants.dart';
-import 'package:topnotes/internal/global_key_registry.dart';
 import 'package:topnotes/internal/show_fab_menu.dart';
 import 'package:topnotes/internal/size_config.dart';
 import 'package:topnotes/ui/screens/note_page.dart';
@@ -142,7 +141,6 @@ class _HomeScreenState extends State<HomeScreen> {
         onLongPress: () {
           Utils.showFabMenu(context, fabOptions);
         },
-        key: GlobalKeyRegistry.get("fab"),
         shape: RoundedRectangleBorder(
           borderRadius:
               BorderRadius.circular(SizeConfig.blockSizeVertical * 10),
@@ -200,68 +198,84 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Scaffold(
-      appBar: assignAppBar(),
-      floatingActionButton: fab,
-      body: GestureDetector(
-        onTap: () {
-          setState(() {
-            selected = false;
-          });
-        },
-        child: ListView(
-          controller: scrollController,
-          physics: BouncingScrollPhysics(),
-          children: [
-            // TopNotes text padding
-            // TopnotesText(),
+    return LayoutBuilder(
+      builder: (_, constraints) {
+        final width = constraints.biggest.width;
+        print(width);
+        return Scaffold(
+          appBar: assignAppBar(),
+          floatingActionButton: fab,
+          body: GestureDetector(
+            onTap: () {
+              setState(() {
+                selected = false;
+              });
+            },
+            child: ListView(
+              controller: scrollController,
+              physics: BouncingScrollPhysics(),
+              children: [
+                // Folders text padding
+                FolderText(),
 
-            // Folders text padding
-            FolderText(),
+                // Folders Listview
+                FoldersDisplay(),
 
-            // Folders Listview
-            FoldersDisplay(),
+                // Tags text padding
+                TagsText(),
 
-            // Tags text padding
-            TagsText(),
-
-            // tags list view
-            BlocBuilder<TagCubit, List<Tag>>(
-              builder: (context, state) {
-                return GridView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: state.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4,
-                    childAspectRatio: 1.8,
-                  ),
-                  itemBuilder: (context, index) => Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: GestureDetector(
-                      onLongPress: () {
-                        print("Long pressed");
-                        setState(() {
-                          deleteState = true;
-                        });
-                      },
-                      child: Chip(
-                        avatar: Icon(Icons.tag),
-                        label: Text("${state[index].tagName}"),
-                        useDeleteButtonTooltip: false,
-                        deleteIcon: deleteState == false
-                            ? Text("${state[index].notesUnderTag.length}")
-                            : Icon(Icons.clear, color: Colors.red,),
-                        onDeleted: () {},
+                // tags list view
+                BlocBuilder<TagCubit, List<Tag>>(
+                  builder: (context, state) {
+                    return GridView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: state.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: width < 450
+                            ? 2
+                            : width < 600
+                                ? 3
+                                : 5,
+                        childAspectRatio: width < 350
+                            ? 2.5
+                            : width < 500
+                                ? 2.0
+                                : 2.5,
                       ),
-                    ),
-                  ),
-                );
-              },
+                      itemBuilder: (context, index) => Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: GestureDetector(
+                          onLongPress: () {
+                            print("Long pressed");
+                            setState(() {
+                              deleteState = true;
+                            });
+                          },
+                          child: Chip(
+                            avatar: Icon(Icons.tag),
+                            label: Text("${state[index].tagName}"),
+                            useDeleteButtonTooltip: false,
+                            deleteIcon: deleteState == false
+                                ? Text("${state[index].notesUnderTag.length}")
+                                : Icon(
+                                    Icons.clear,
+                                    color: Colors.red,
+                                  ),
+                            onDeleted: () {
+                              print("deleted");
+                            },
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
