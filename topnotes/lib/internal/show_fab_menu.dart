@@ -1,45 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:topnotes/internal/global_key_registry.dart';
 import 'package:topnotes/internal/size_config.dart';
 
 class Utils {
   static void showFabMenu(BuildContext context, List<Widget> items) {
-    RenderBox fabBox =
-        GlobalKeyRegistry.get("fab").currentContext.findRenderObject();
 
-    Size fabSize = fabBox.size;
-    Offset fabPosition = fabBox.localToGlobal(Offset(0, 0));
-
-    Widget child = Stack(
-      children: [
-        Positioned(
-          bottom: MediaQuery.of(context).size.height -
-              (fabPosition.dy + fabSize.height),
-          right: MediaQuery.of(context).size.width -
-              (fabPosition.dx + fabSize.width),
-          child: Hero(
-            tag: "fabMenu",
-            child: Material(
-              elevation: 2,
-              clipBehavior: Clip.antiAlias,
-              shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(SizeConfig.blockSizeVertical),
-              ),
-              child: SizedBox(
-                width: SizeConfig.screenWidth / 2.1,
-                child: ListView(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.all(0),
-                  reverse: true,
-                  children: items,
+    Widget child = LayoutBuilder(
+      builder: (_, constraints) {
+        final width = constraints.biggest.width;
+        final height = constraints.biggest.height;
+        print(height);
+        return Stack(
+          children: [
+            Positioned(
+              bottom: height * 0.05,
+              right: width * 0.05,
+              child: Hero(
+                tag: "fabMenu",
+                child: Material(
+                  elevation: 2,
+                  clipBehavior: Clip.antiAlias,
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(SizeConfig.blockSizeVertical),
+                  ),
+                  child: SizedBox(
+                    width: height < 600
+                        ? width / 1.65
+                        : height < 900
+                            ? width / 1.8
+                            : width / 3.5,
+                    child: ListView(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      padding: EdgeInsets.all(0),
+                      reverse: true,
+                      children: items,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-        )
-      ],
+            )
+          ],
+        );
+      },
     );
 
     Navigator.of(context).push(
