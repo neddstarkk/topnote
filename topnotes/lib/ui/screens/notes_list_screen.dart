@@ -22,7 +22,6 @@ class NotesListScreen extends StatefulWidget {
 }
 
 class _NotesListScreenState extends State<NotesListScreen> {
-  bool gridCountTwo = false;
   var tapPosition;
   Color tileColor = Colors.white10;
   bool triggerGlobalSelection = false;
@@ -46,17 +45,19 @@ class _NotesListScreenState extends State<NotesListScreen> {
                 itemBuilder: (context) {
                   return [
                     PopupMenuItem(
-                        value: 0,
-                        child: IconTextWidget(
-                          icon: Icon(Icons.delete_forever),
-                          text: "Empty Trash",
-                        ))
+                      value: 0,
+                      child: IconTextWidget(
+                        icon: Icon(Icons.delete_forever),
+                        text: "Empty Trash",
+                      ),
+                    )
                   ];
                 },
                 onSelected: (value) {
-                  if(value == 0) {
+                  if (value == 0) {
                     setState(() {
-                      BlocProvider.of<FolderCubit>(context).emptyFolder("Trash");
+                      BlocProvider.of<FolderCubit>(context)
+                          .emptyFolder("Trash");
                       widget.notesToBeDisplayed = [];
                     });
                   }
@@ -157,11 +158,9 @@ class _NotesListScreenState extends State<NotesListScreen> {
             : Text(""),
       ],
     );
-
     if (triggerGlobalSelection == true) {
       return newAppBar;
     }
-
     return defaultAppBar;
   }
 
@@ -169,177 +168,216 @@ class _NotesListScreenState extends State<NotesListScreen> {
     showDialog(context: context, builder: (context) => Container());
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
   void _storePosition(TapDownDetails details) {
     tapPosition = details.globalPosition;
+  }
+
+  Future<bool> nativeBackButtonControl() {
+    if (triggerGlobalSelection == true) {
+      setState(() {
+        selectedList = [];
+        triggerGlobalSelection = false;
+      });
+    } else if (triggerGlobalSelection == false && 1 == 1) {
+      Navigator.pop(context, true);
+      return Future.value(true);
+    }
+    return Future.value(false);
+  }
+
+  int tagDisplayLength(double width, List<dynamic> associatedTags) {
+    if (width < 350) {
+      if (associatedTags.length < 4) {
+        return associatedTags.length;
+      } else {
+        return 3;
+      }
+    } else if (width < 450) {
+      if (associatedTags.length < 5) {
+        return associatedTags.length;
+      } else {
+        return 4;
+      }
+    }
+
+    if (associatedTags.length < 6) {
+      return associatedTags.length;
+    } else
+      return 5;
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () {
-        if (triggerGlobalSelection == true) {
-          setState(() {
-            selectedList = [];
-            triggerGlobalSelection = false;
-          });
-        } else if (triggerGlobalSelection == false && 1 == 1) {
-          Navigator.pop(context, true);
-          return Future.value(true);
-        }
-        return Future.value(false);
-      },
+      onWillPop: nativeBackButtonControl,
       child: Scaffold(
         appBar: assignAppbar(),
         body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: SizeConfig.blockSizeHorizontal * 4),
+              horizontal: SizeConfig.blockSizeHorizontal * 4,
+            ),
             child: widget.notesToBeDisplayed.length == 0
                 ? EmptyStateWidget()
-                : GridView.builder(
-                    reverse: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: widget.notesToBeDisplayed.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 1,
-                      mainAxisSpacing: SizeConfig.blockSizeVertical * 2,
-                      crossAxisSpacing: SizeConfig.blockSizeHorizontal * 2,
-                      childAspectRatio: 3.0,
-                    ),
-                    itemBuilder: (context, index) => Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTapDown: _storePosition,
-                        onLongPress: () {
-                          if (triggerGlobalSelection == false) {
-                            setState(() {
-                              triggerGlobalSelection = true;
-                              selectedList.add(index);
-                            });
-                          }
-                        },
-                        onTap: () async {
-                          if (triggerGlobalSelection == false) {
-                            var result = await Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                builder: (context) => NotePage(
-                                  note: widget.notesToBeDisplayed[index],
-                                ),
-                              ),
-                            );
-                            if (result == true) {
-                              setState(() {});
-                            }
-                          } else if (triggerGlobalSelection == true) {
-                            if (selectedList.contains(index)) {
-                              setState(() {
-                                selectedList.remove(index);
-                              });
-
-                              if (selectedList.isEmpty) {
+                : LayoutBuilder(
+                    builder: (_, constraints) {
+                      final width = constraints.biggest.width;
+                      print(width);
+                      return ListView.builder(
+                        reverse: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: widget.notesToBeDisplayed.length,
+                        itemBuilder: (context, index) => Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTapDown: _storePosition,
+                            onLongPress: () {
+                              if (triggerGlobalSelection == false) {
                                 setState(() {
-                                  triggerGlobalSelection = false;
+                                  triggerGlobalSelection = true;
+                                  selectedList.add(index);
                                 });
                               }
-                            } else {
-                              setState(() {
-                                selectedList.add(index);
-                              });
-                            }
-                          }
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white10,
-                            border: Border.all(
-                                color: selectedList.contains(index) == true
-                                    ? Color(0xFFD8D8D8)
-                                    : Colors.transparent),
-                            borderRadius: BorderRadius.circular(
-                              SizeConfig.blockSizeHorizontal,
-                            ),
-                          ),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: SizeConfig.blockSizeHorizontal * 5,
-                            vertical: SizeConfig.blockSizeVertical * 2.5,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    bottom: SizeConfig.blockSizeHorizontal),
-                                child: Container(
-                                  child: Text(
-                                    "${widget.notesToBeDisplayed[index].title}",
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white70,
-                                      fontSize:
-                                          SizeConfig.blockSizeVertical * 2,
+                            },
+                            onTap: () async {
+                              if (triggerGlobalSelection == false) {
+                                var result = await Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                    builder: (context) => NotePage(
+                                      note: widget.notesToBeDisplayed[index],
                                     ),
                                   ),
+                                );
+                                if (result == true) {
+                                  setState(() {});
+                                }
+                              } else if (triggerGlobalSelection == true) {
+                                if (selectedList.contains(index)) {
+                                  setState(() {
+                                    selectedList.remove(index);
+                                  });
+
+                                  if (selectedList.isEmpty) {
+                                    setState(() {
+                                      triggerGlobalSelection = false;
+                                    });
+                                  }
+                                } else {
+                                  setState(() {
+                                    selectedList.add(index);
+                                  });
+                                }
+                              }
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white10,
+                                border: Border.all(
+                                    color: selectedList.contains(index) == true
+                                        ? Color(0xFFD8D8D8)
+                                        : Colors.transparent),
+                                borderRadius: BorderRadius.circular(
+                                  SizeConfig.blockSizeHorizontal,
                                 ),
                               ),
-                              Row(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 20,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    "${NoteTileDisplay.displayTime(
-                                      widget
-                                          .notesToBeDisplayed[index].timeStamp,
-                                    )}",
-                                    overflow: TextOverflow.fade,
-                                    style: TextStyle(color: Colors.white38),
-                                  ),
-                                  Expanded(
-                                      child: Padding(
-                                    padding: EdgeInsets.only(
-                                        left:
-                                            SizeConfig.blockSizeHorizontal * 3),
-                                    child: Container(
-                                      child: Text(
-                                        "${NoteTileDisplay.displayContent(widget.notesToBeDisplayed[index].content)}",
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                        style: TextStyle(color: Colors.white60),
+                                  Container(
+                                    child: Text(
+                                      "${widget.notesToBeDisplayed[index].title}",
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white70,
+                                        fontSize: 18,
                                       ),
                                     ),
-                                  )),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "${NoteTileDisplay.displayTime(
+                                          widget.notesToBeDisplayed[index]
+                                              .timeStamp,
+                                        )}",
+                                        overflow: TextOverflow.fade,
+                                        style: TextStyle(color: Colors.white38),
+                                      ),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: EdgeInsets.only(
+                                              left: SizeConfig
+                                                      .blockSizeHorizontal *
+                                                  3),
+                                          child: Container(
+                                            child: Text(
+                                              "${NoteTileDisplay.displayContent(widget.notesToBeDisplayed[index].content)}",
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                              style: TextStyle(
+                                                color: Colors.white60,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: SizeConfig.blockSizeVertical * 2,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        width:
+                                            SizeConfig.blockSizeHorizontal * 69,
+                                        height: 25,
+                                        child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          shrinkWrap: true,
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          itemCount: tagDisplayLength(
+                                            width,
+                                            widget.notesToBeDisplayed[index]
+                                                .associatedTags,
+                                          ),
+                                          itemBuilder: (context, i) =>
+                                              TagDisplayWidget(
+                                            tag: widget
+                                                .notesToBeDisplayed[index]
+                                                .associatedTags[i],
+                                          ),
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Icon(
+                                        Icons.star,
+                                        color: widget.notesToBeDisplayed[index]
+                                                    .isFavorite ==
+                                                true
+                                            ? Colors.amber
+                                            : Colors.white10,
+                                      )
+                                    ],
+                                  ),
                                 ],
                               ),
-                              SizedBox(
-                                height: SizeConfig.blockSizeVertical * 2,
-                              ),
-                              Row(
-                                children: [
-                                  for (var tag in widget
-                                      .notesToBeDisplayed[index].associatedTags)
-                                    TagDisplayWidget(tag: tag),
-                                  Spacer(),
-                                  Icon(
-                                    Icons.star,
-                                    color: widget.notesToBeDisplayed[index]
-                                                .isFavorite ==
-                                            true
-                                        ? Colors.amber
-                                        : Colors.white10,
-                                  )
-                                ],
-                              ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   ),
           ),
         ),

@@ -201,7 +201,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return LayoutBuilder(
       builder: (_, constraints) {
         final width = constraints.biggest.width;
-        print(width);
         return Scaffold(
           appBar: assignAppBar(),
           floatingActionButton: fab,

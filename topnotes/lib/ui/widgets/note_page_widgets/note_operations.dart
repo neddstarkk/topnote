@@ -34,82 +34,93 @@ class _NoteOperationsState extends State<NoteOperations> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Container(
-      height: SizeConfig.blockSizeVertical * 5,
-      width: SizeConfig.blockSizeVertical * 6,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(SizeConfig.blockSizeVertical * 1.6),
-        ),
-      ),
-      child: MaterialButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(SizeConfig.blockSizeVertical * 1.6),
+    return LayoutBuilder(
+      builder: (_, constraints) {
+        final height = constraints.biggest.height;
+        return Container(
+          height: SizeConfig.blockSizeVertical * 5,
+          width: SizeConfig.blockSizeVertical * 6,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(
+              Radius.circular(SizeConfig.blockSizeVertical * 1.6),
+            ),
           ),
-        ),
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            builder: (context) => Container(
-              height: SizeConfig.blockSizeVertical * 12,
-              width: SizeConfig.screenWidth,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    leading: Icon(
-                      Icons.folder_open_outlined,
-                      color: iconColor,
-                    ),
-                    title: Text(
-                      "Add to folder",
-                      style: TextStyle(
-                          color: AppColors.textColor.withOpacity(0.8)),
-                    ),
-                    enabled: widget.note != null ? true : false,
-                    onTap: () {
-                      Navigator.pop(context);
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialogFolders(
-                          note: widget.note,
-                        ),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    enabled:
-                        tags.isNotEmpty && widget.note != null ? true : false,
-                    leading: Icon(
-                      Icons.local_offer_outlined,
-                      color: iconColor,
-                    ),
-                    title: Text(
-                      "Add tags",
-                      style: TextStyle(
-                          color: AppColors.textColor.withOpacity(0.8)),
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialogTags(
-                          note: widget.note,
-                        ),
-                      );
-                    },
-                  ),
-                ],
+          child: MaterialButton(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(SizeConfig.blockSizeVertical * 1.6),
               ),
             ),
-          );
-        },
-        child: Icon(
-          Icons.more_vert,
-          color: iconColor,
-        ),
-      ),
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (context) => Container(
+                  height: 110,
+                  width: SizeConfig.screenWidth,
+                  child: ListView(
+                    physics: NeverScrollableScrollPhysics(),
+                    children: [
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ListTile(
+                            leading: Icon(
+                              Icons.folder_open_outlined,
+                              color: iconColor,
+                            ),
+                            title: Text(
+                              "Add to folder",
+                              style: TextStyle(
+                                  color: AppColors.textColor.withOpacity(0.8)),
+                            ),
+                            enabled: widget.note != null ? true : false,
+                            onTap: () {
+                              Navigator.pop(context);
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialogFolders(
+                                  note: widget.note,
+                                ),
+                              );
+                            },
+                          ),
+                          ListTile(
+                            enabled: tags.isNotEmpty && widget.note != null
+                                ? true
+                                : false,
+                            leading: Icon(
+                              Icons.local_offer_outlined,
+                              color: iconColor,
+                            ),
+                            title: Text(
+                              "Add tags",
+                              style: TextStyle(
+                                  color: AppColors.textColor.withOpacity(0.8)),
+                            ),
+                            onTap: () {
+                              Navigator.pop(context);
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialogTags(
+                                  note: widget.note,
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+            child: Icon(
+              Icons.more_vert,
+              color: iconColor,
+            ),
+          ),
+        );
+      },
     );
   }
 }

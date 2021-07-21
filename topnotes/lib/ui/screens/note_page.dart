@@ -78,7 +78,7 @@ class _NotePageState extends State<NotePage> {
           ],
         ),
         body: Padding(
-          padding: EdgeInsets.only(left: SizeConfig.blockSizeHorizontal * 3),
+          padding: EdgeInsets.only(left: SizeConfig.blockSizeHorizontal * 3, bottom: 0),
           child: SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
             child: Column(
@@ -216,10 +216,10 @@ class _NotePageState extends State<NotePage> {
           ),
         ),
         bottomNavigationBar: Transform.translate(
-          offset: Offset(0.0, -1 * MediaQuery.of(context).viewInsets.bottom),
+          offset: Offset(0, -1 * MediaQuery.of(context).viewInsets.bottom),
           child: BottomAppBar(
+            color: AppColors.backgroundColor.withAlpha(210),
             child: Container(
-              color: AppColors.backgroundColor.withAlpha(210),
               height: SizeConfig.blockSizeVertical * 5,
               width: SizeConfig.screenWidth,
               child: Row(
