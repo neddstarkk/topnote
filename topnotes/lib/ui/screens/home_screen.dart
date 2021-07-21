@@ -12,8 +12,9 @@ import 'package:topnotes/internal/size_config.dart';
 import 'package:topnotes/ui/screens/note_page.dart';
 import 'package:topnotes/ui/widgets/home_screen_widgets/fake_fab.dart';
 import 'package:topnotes/ui/widgets/home_screen_widgets/folder_text.dart';
-import 'package:topnotes/ui/widgets/home_screen_widgets/folders_display.dart';
 import 'package:topnotes/ui/widgets/home_screen_widgets/tags_text.dart';
+
+import 'notes_list_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -218,7 +219,64 @@ class _HomeScreenState extends State<HomeScreen> {
                 FolderText(),
 
                 // Folders Listview
-                FoldersDisplay(),
+                BlocBuilder<FolderCubit, List<Folder>>(
+                  builder: (context, state) {
+                    return ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: state.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(
+                            "${state[index].folderName}",
+                            style: textStyle,
+                          ),
+                          enabled: deleteState == true ? false : true,
+                          leading: state[index].icon != null
+                              ? state[index].icon
+                              : Icon(
+                                  Icons.folder_outlined,
+                                  color: iconColor,
+                                ),
+                          trailing: deleteState == false
+                              ? Text(
+                                  "${state[index].notesUnderFolder.length}",
+                                  style: textStyle,
+                                )
+                              : state[index].typeOfFolder == 'ND' ? Text("") : IconButton(
+                                  onPressed: () {
+                                    print("Folder delete");
+                                  },
+                                  icon: Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                          onTap: () async {
+                            var result = await Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => NotesListScreen(
+                                  screenTitle: state[index].folderName,
+                                  notesToBeDisplayed:
+                                      state[index].notesUnderFolder,
+                                ),
+                              ),
+                            );
+                            if (result == true) {
+                              setState(() {});
+                            }
+                          },
+                          onLongPress: () {
+                            setState(() {
+                              deleteState = true;
+                            });
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
 
                 // Tags text padding
                 TagsText(),
@@ -246,7 +304,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: GestureDetector(
                           onLongPress: () {
-                            print("Long pressed");
                             setState(() {
                               deleteState = true;
                             });
