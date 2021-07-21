@@ -5,6 +5,7 @@ import 'package:topnotes/cubits/folders/folder_cubit.dart';
 import 'package:topnotes/data/models/notes_model.dart';
 import 'package:topnotes/internal/constants.dart';
 import 'package:topnotes/internal/size_config.dart';
+import 'package:topnotes/internal/utils.dart';
 import 'package:topnotes/ui/screens/note_page.dart';
 import 'package:topnotes/ui/widgets/home_screen_widgets/custom_appbar_row.dart';
 import 'package:topnotes/ui/widgets/notes_list_page_widgets/empty_state_widget.dart';
@@ -185,26 +186,6 @@ class _NotesListScreenState extends State<NotesListScreen> {
     return Future.value(false);
   }
 
-  int tagDisplayLength(double width, List<dynamic> associatedTags) {
-    if (width < 350) {
-      if (associatedTags.length < 4) {
-        return associatedTags.length;
-      } else {
-        return 3;
-      }
-    } else if (width < 450) {
-      if (associatedTags.length < 5) {
-        return associatedTags.length;
-      } else {
-        return 4;
-      }
-    }
-
-    if (associatedTags.length < 6) {
-      return associatedTags.length;
-    } else
-      return 5;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -222,7 +203,6 @@ class _NotesListScreenState extends State<NotesListScreen> {
                 : LayoutBuilder(
                     builder: (_, constraints) {
                       final width = constraints.biggest.width;
-                      print(width);
                       return ListView.builder(
                         reverse: true,
                         physics: NeverScrollableScrollPhysics(),
@@ -344,7 +324,7 @@ class _NotesListScreenState extends State<NotesListScreen> {
                                           shrinkWrap: true,
                                           physics:
                                               NeverScrollableScrollPhysics(),
-                                          itemCount: tagDisplayLength(
+                                          itemCount: Utils.tagDisplayLength(
                                             width,
                                             widget.notesToBeDisplayed[index]
                                                 .associatedTags,

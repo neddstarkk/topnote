@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:topnotes/internal/size_config.dart';
 
-class Utils {
+class FabUtils {
   static void showFabMenu(BuildContext context, List<Widget> items) {
     Widget child = LayoutBuilder(
       builder: (_, constraints) {

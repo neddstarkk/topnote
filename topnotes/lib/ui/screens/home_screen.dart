@@ -139,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: FakeFab(
         controller: scrollController,
         onLongPress: () {
-          Utils.showFabMenu(context, fabOptions);
+          FabUtils.showFabMenu(context, fabOptions);
         },
         shape: RoundedRectangleBorder(
           borderRadius:
@@ -239,7 +239,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         childAspectRatio: width < 350
                             ? 2.5
                             : width < 500
-                                ? 2.0
+                                ? 3.0
                                 : 2.5,
                       ),
                       itemBuilder: (context, index) => Padding(

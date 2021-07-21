@@ -91,6 +91,7 @@ class _NotePageState extends State<NotePage> {
                   style: TextStyle(
                     fontSize: SizeConfig.blockSizeVertical * 2,
                     fontWeight: FontWeight.bold,
+                    color: Colors.white70,
                   ),
                   decoration: InputDecoration(
                     hintText: "Title",
@@ -141,19 +142,6 @@ class _NotePageState extends State<NotePage> {
                   },
                 ),
 
-                // associated tags Container
-
-                Container(
-                  child: Row(
-                    children: [
-                      if (widget.note != null &&
-                          widget.note.associatedTags.isNotEmpty)
-                        for (var tag in widget.note.associatedTags)
-                          showAssociatedTags(tag),
-                    ],
-                  ),
-                ),
-
                 // content textfield,
                 TextField(
                   controller: contentController,
@@ -162,6 +150,7 @@ class _NotePageState extends State<NotePage> {
                   maxLines: null,
                   style: TextStyle(
                     fontSize: SizeConfig.blockSizeVertical * 2,
+                    color: Colors.white60
                   ),
                   decoration: InputDecoration(
                     border: InputBorder.none,
